@@ -47,7 +47,9 @@ export default function DiceGame() {
     const ud = await getDiceLastPlay();
     if (ud != null && ud.result && !ud.claimed) {
       setUserData(ud);
-    } else setUserData(null);
+    } else {
+      setUserData(null);
+    }
   };
 
   return (
@@ -67,7 +69,7 @@ export default function DiceGame() {
             <div className="dice-panel">
               <div className="one-dice">
                 <ReactDice
-                  faceColor="linear-gradient(268.42deg, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0.9) 100.18%)"
+                  faceColor="linear-gradient(268.42deg, rgb(5, 38, 4) 0%, rgba(5, 38, 4, 0.9) 100.18%)"
                   ref={reactDice1}
                   dieSize={windowSize > 770 ? 160 : 120}
                   dieCornerRadius={5}
@@ -82,7 +84,7 @@ export default function DiceGame() {
               </div>
               <div className="one-dice">
                 <ReactDice
-                  faceColor="linear-gradient(268.42deg, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0.9) 100.18%)"
+                  faceColor="linear-gradient(268.42deg, rgb(5, 38, 4) 0%, rgba(5, 38, 4, 0.9) 100.18%)"
                   ref={reactDice2}
                   dieSize={windowSize > 770 ? 160 : 120}
                   dieCornerRadius={5}

@@ -1,9 +1,3 @@
-import {
-  Brightness7 as Brightness7Icon,
-  Brightness3 as Brightness3Icon,
-  ComputerTwoTone as ComputerIcon,
-  Person3TwoTone as PersonIcon,
-} from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { openNotification, sleep } from '../utils/components';
@@ -134,7 +128,7 @@ export default function Coinflip() {
                   setSelectedSide(false);
                 }}
               >
-                <Brightness7Icon style={{ fontSize: '80px' }} />
+                <img src="/images/coin_front.png" className="coinimg" alt="Wolf Coin Front Side" />
               </div>
               <div
                 className={'back-coin coin-select-button ' + (selectedSide ? 'active' : '')}
@@ -142,7 +136,7 @@ export default function Coinflip() {
                   setSelectedSide(true);
                 }}
               >
-                <Brightness3Icon style={{ fontSize: '80px' }} />
+                <img src="/images/coin_back.png" className="coinimg" alt="Wolf Coin Back Side" />
               </div>
             </div>
             <h3 className="coinflip-gameboard-h3">Choose your side</h3>
@@ -204,10 +198,10 @@ export default function Coinflip() {
           <div className="coinflip-gameboard">
             <div className="coin-flipping-panel">
               <div className="coin-flipping-image animation-front-image front-coin">
-                <Brightness7Icon style={{ fontSize: '160px' }} />
+                <img src="/images/coin_front.png" alt="Wolf Coin Front Side" />
               </div>
               <div className="coin-flipping-image animation-back-image back-coin">
-                <Brightness3Icon style={{ fontSize: '160px' }} />
+                <img src="/images/coin_back.png" alt="Wolf Coin Front Side" />
               </div>
             </div>
             <h3 className="coinflip-gameboard-h3">F l i p p i n g . . .</h3>
@@ -221,9 +215,9 @@ export default function Coinflip() {
                 className={'coin-result ' + (selectedSide === false ? 'front-coin' : 'back-coin')}
               >
                 {!selectedSide ? (
-                  <Brightness7Icon style={{ fontSize: '160px' }} />
+                  <img src="/images/coin_front.png" alt="Wolf Coin Front Side" />
                 ) : (
-                  <Brightness3Icon style={{ fontSize: '160px' }} />
+                  <img src="/images/coin_back.png" alt="Wolf Coin Back Side" />
                 )}
               </div>
             </div>
@@ -260,9 +254,9 @@ export default function Coinflip() {
                 className={'coin-result ' + (selectedSide === false ? 'back-coin' : 'front-coin')}
               >
                 {!selectedSide ? (
-                  <Brightness3Icon style={{ fontSize: '160px' }} />
+                  <img src="/images/coin_front.png" alt="Wolf Coin Front Side" />
                 ) : (
-                  <Brightness7Icon style={{ fontSize: '160px' }} />
+                  <img src="/images/coin_back.png" alt="Wolf Coin Back Side" />
                 )}
               </div>
             </div>
@@ -289,97 +283,34 @@ export default function Coinflip() {
             <div
               className={
                 'recent-game-item ' +
-                ((item.result && item.select === 1) || (item.result === false && item.select === 2)
-                  ? 'recent-game-blue-item '
-                  : 'recent-game-red-item ') +
                 (idx === 0 ? 'recent-game-top-item ' : '') +
                 (idx === recentGames.length - 1 ? 'recent-game-bottom-item' : '')
               }
               key={idx}
             >
-              <div
-                className={
-                  'recent-game-left-right recent-game-left ' +
-                  ((item.result && item.select === 1) ||
-                  (item.result === false && item.select === 2)
-                    ? 'win-panel'
-                    : '')
-                }
-              >
+              <div className="recent-game-detail">
                 <div className="item">
-                  <div className="logo left-logo">
-                    {item.select === 1 ? (
-                      <PersonIcon className="logo-icon" />
+                  <div className="logo">
+                    {item.result && item.select === 1 ? (
+                      <img src="/images/coin_front.png" alt="Wolf Coin Front Side" />
                     ) : (
-                      <ComputerIcon className="logo-icon" />
+                      <img src="/images/coin_back.png" alt="Wolf Coin Back Side" />
                     )}
                   </div>
                 </div>
-                <div className="item">
-                  <div className="item-name">
-                    {item.select === 1 ? item.player.substr(0, 8) : '(Flip Bot)'}
-                  </div>
-                </div>
+                <div className="item">{item.player.substr(0, 10) + '...'}</div>
+                <div className="item bet-amount">bet {item.amount} WOLFIES</div>
                 {((item.result && item.select === 1) ||
                   (item.result === false && item.select === 2)) && (
-                  <div className="item item-flex">
-                    <div className="bet-amount">
-                      <div className="coin-image" />
-                      <div className="amount">{item.amount}</div>
-                    </div>
+                  <div className="item">
                     <div className="bet-image">
                       <img src="/images/crown.svg" width="14px" alt="crown" />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="recent-game-center">
-                {(item.result && item.select === 1) ||
-                (item.result === false && item.select === 2) ? (
-                  <div className="front-coin coin">
-                    <Brightness7Icon />
-                  </div>
-                ) : (
-                  <div className="back-coin coin">
-                    <Brightness3Icon />
-                  </div>
-                )}
-              </div>
-              <div
-                className={
-                  'recent-game-left-right recent-game-right ' +
-                  ((item.result && item.select === 1) ||
-                  (item.result === false && item.select === 2)
-                    ? ''
-                    : 'win-panel')
-                }
-              >
-                <div className="item">
-                  <div className="logo right-logo">
-                    {item.select === 1 ? (
-                      <ComputerIcon className="logo-icon" />
-                    ) : (
-                      <PersonIcon className="logo-icon" />
-                    )}
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="item-name">
-                    {item.select === 2 ? item.player.substr(0, 8) : '(Flip Bot)'}
-                  </div>
-                </div>
-                {((item.result && item.select === 2) ||
-                  (item.result === false && item.select === 1)) && (
-                  <div className="item item-flex">
-                    <div className="bet-amount">
-                      <div className="coin-image" />
-                      <div className="amount">{item.amount}</div>
-                    </div>
-                    <div className="bet-image">
-                      <img src="/images/crown.svg" width="14px" alt="crown" />
-                    </div>
-                  </div>
-                )}
+              <div className="recent-game-time">
+                <div className="item-name">5 MINUTES AGO</div>
               </div>
             </div>
           );

@@ -114,14 +114,12 @@ export default function Header() {
       handleSetWeb3(new Web3(provider));
       const chainId = await provider.request({ method: 'eth_chainId' });
       if (chainId === baseChainId) {
-        console.log('Bravo!, you are on the correct network');
       } else {
         try {
           await provider.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: baseChainId }],
           });
-          console.log('You have succefully switched to Binance main network');
         } catch (switchError: any) {
           // This error code indicates that the chain has not been added to MetaMask.
           if (switchError.code === 4902) {
@@ -142,7 +140,6 @@ export default function Header() {
                 ],
               });
             } catch (addError) {
-              console.log(addError);
               // alert(addError);
             }
           }
@@ -156,9 +153,7 @@ export default function Header() {
       });
       const account = accounts[0];
       handleSetWalletAddress(account);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const resetApp = async () => {

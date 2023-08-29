@@ -103,12 +103,12 @@ export default function Coinflip() {
   }, [pendingAmount]);
 
   const getTokenAmount = async () => {
-    setTokenAmount(await getWOLFIESbalance());
+    setTokenAmount(Number(await getWOLFIESbalance()));
   };
 
   const getPendingAmount = async () => {
     let last = await getFlipLastPlay();
-    setPendingAmount(last.pendingAmount);
+    setPendingAmount(Number(last.pendingAmount));
   };
 
   return (

@@ -70,7 +70,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
       let tokenContract = new web3.web3.eth.Contract(ERC20_ABI, InfoCoinflip.token_type);
       let StakingContract = new web3.web3.eth.Contract(STAKING_ABI, InfoStaking.contract);
 
-      let amount = _amount * Math.pow(10, InfoStaking.token_decimals);
+      let amount = BigInt(_amount * Math.pow(10, InfoStaking.token_decimals));
 
       let balance = await tokenContract.methods.balanceOf(wallet).call();
       if (balance < amount) throw new Error('Not Enough Token');
@@ -130,7 +130,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
       let tokenContract = new web3.web3.eth.Contract(ERC20_ABI, InfoCoinflip.token_type);
       let coinFlipContract = new web3.web3.eth.Contract(FLIP_ABI, InfoCoinflip.contract);
 
-      let amount = selectedAmount * Math.pow(10, InfoCoinflip.token_decimals);
+      let amount = BigInt(selectedAmount * Math.pow(10, InfoCoinflip.token_decimals));
 
       let balance = await tokenContract.methods.balanceOf(wallet).call();
       if (balance < amount) throw new Error('Not Enough Token');
@@ -188,7 +188,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
       let tokenContract = new web3.web3.eth.Contract(ERC20_ABI, InfoCoinflip.token_type);
       let diceContract = new web3.web3.eth.Contract(DICE_ABI, InfoDice.contract);
 
-      let amount = selectedAmount * Math.pow(10, InfoDice.token_decimals);
+      let amount = BigInt(selectedAmount * Math.pow(10, InfoDice.token_decimals));
 
       let balance = await tokenContract.methods.balanceOf(wallet).call();
       if (balance < amount) throw new Error('Not Enough Token');
@@ -209,7 +209,6 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
         gas: 300000,
         gasPrice: 5000000000,
       });
-      console.log(result);
 
       return result.events.DiceFinished.returnValues.betData;
     },

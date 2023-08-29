@@ -44,7 +44,6 @@ export default function DiceGame() {
   };
 
   const getUserData = async () => {
-    // const ud = await getUserDiceData()
     const ud = await getDiceLastPlay();
     if (ud != null && ud.result && !ud.claimed) {
       setUserData(ud);
@@ -172,7 +171,6 @@ export default function DiceGame() {
 
                     setUserData(res);
                   } catch (err: any) {
-                    console.log(err);
                     openNotification('error', err.message);
                   }
                   setIsRoll(false);

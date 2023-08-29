@@ -102,7 +102,7 @@ export default function Home() {
             <h1>WOLFIES STAKING</h1>
           </div>
           <div className="line-2">
-            <p>Stake $SHS TOKEN with WOLFIES NFT to get SUPERCHARGED APY rewards.</p>
+            <p>Stake $WOLFIES TOKEN with WOLFIES NFT to get SUPERCHARGED APY rewards.</p>
             <p>The more the NFT's you STAKE the more your APY.</p>
           </div>
           <div className="line-3">
@@ -118,26 +118,28 @@ export default function Home() {
             </Button>
           </div>
         </div>
-        {/* <div className="one-slider slider-3">
-                <div className="line-1">
-                    <h1>COINFLIP</h1>
-                    <h2>2 TIMES OR LOST ALL</h2>
-                </div>
-                <div className="line-2">
-                    <p>You bet SHS token. If you win, you get 2 times token amount you bet.</p>
-                    <p>Whereas, you will lost all tokens</p>
-                </div>
-                <div className="line-3">
-                    <Button variant="contained" color="primary" style={{fontFamily: "IndustryBlack"}} onClick={()=>{
-                        window.location.href = "/coinflip"
-                    }}>PLAY NOW</Button>
-                </div>
-            </div>
-            <div className="one-slider slider-4">
-                <div className="line-1">
-
-                </div>
-            </div> */}
+        <div className="one-slider slider-3">
+          <div className="line-1">
+            <h1>COINFLIP</h1>
+            <h2>2 TIMES OR LOST ALL</h2>
+          </div>
+          <div className="line-2">
+            <p>You bet WOLFIES token. If you win, you get 2 times token amount you bet.</p>
+            <p>Whereas, you will lost all tokens</p>
+          </div>
+          <div className="line-3">
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ fontFamily: 'IndustryBlack' }}
+              onClick={() => {
+                window.location.href = '/coinflip';
+              }}
+            >
+              PLAY NOW
+            </Button>
+          </div>
+        </div>
       </Slider>
       <div className="home-origin">
         <div className="home-origin-header">

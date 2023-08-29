@@ -1,6 +1,3 @@
-export const SHS_TOKEN_CONTRACT_ADDRESS = "0x13c79205e72a91c4adea3d552642f43e7a4f9a98bae3e2a579da05b1c8d1d6a8"
-export const SHS_TOKEN_DECIMALS = 9
-
 export const InfoStaking = {
     contract: '0xFF5322505fC22302fC14A0A157759F0A88252128',
     token_type: '0x314d7114d2dDdd32e9d6AAB5be32234f4ceBcE63',

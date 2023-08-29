@@ -16,6 +16,7 @@ import {
   // DomainRounded as DomainRoundedIcon,
   CasinoRounded as CasinoRoundedIcon,
   DocumentScannerRounded as DocumentScannerRoundedIcon,
+  ShoppingCartCheckout as ShoppingCartCheckoutIcon,
   // SportsSoccer as RouletteIcon,
 } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
@@ -25,6 +26,12 @@ const menuItems = [
     name: 'Home',
     element: <HomeIcon sx={{ fontSize: '30px' }} />,
     link: '/home',
+    external: false,
+  },
+  {
+    name: 'Mint',
+    element: <ShoppingCartCheckoutIcon sx={{ fontSize: '30px' }} />,
+    link: '/mint',
     external: false,
   },
   {
@@ -67,7 +74,7 @@ const drawerWidth = 240;
 
 const openedMixin = (_theme: Theme): CSSObject => ({
   background:
-    'linear-gradient(0deg, rgb(16, 28, 43), rgb(16, 28, 43)), linear-gradient(180.6deg, rgb(17, 25, 35) 0.46%, rgb(19, 33, 51) 99.43%), linear-gradient(rgb(0, 3, 6) 0%, rgb(1, 9, 18) 60.19%);',
+    'linear-gradient(0deg, rgb(11,24,14), rgb(11,24,14)), linear-gradient(180.6deg, rgb(17, 25, 35) 0.46%, rgb(19, 33, 51) 99.43%), linear-gradient(rgb(0, 3, 6) 0%, rgb(1, 9, 18) 60.19%);',
   width: drawerWidth,
   // transition: theme.transitions.create('width', {
   //   easing: theme.transitions.easing.sharp,
@@ -78,7 +85,7 @@ const openedMixin = (_theme: Theme): CSSObject => ({
 
 const closedMixin = (theme: Theme): CSSObject => ({
   background:
-    'linear-gradient(0deg, rgb(16, 28, 43), rgb(16, 28, 43)), linear-gradient(180.6deg, rgb(17, 25, 35) 0.46%, rgb(19, 33, 51) 99.43%), linear-gradient(rgb(0, 3, 6) 0%, rgb(1, 9, 18) 60.19%);',
+    'linear-gradient(0deg, rgb(11,24,14), rgb(11,24,14)), linear-gradient(180.6deg, rgb(17, 25, 35) 0.46%, rgb(19, 33, 51) 99.43%), linear-gradient(rgb(0, 3, 6) 0%, rgb(1, 9, 18) 60.19%);',
   // transition: theme.transitions.create('width', {
   //   easing: theme.transitions.easing.sharp,
   //   duration: theme.transitions.duration.leavingScreen,
@@ -158,7 +165,7 @@ export default function SideBar() {
                       : '',
                   ':hover': {
                     background:
-                      'linear-gradient(90deg, rgba(150, 168, 194, 0.2) 0%, rgba(150, 168, 194, 0.05) 100%);',
+                      'linear-gradient(90deg, rgba(49, 225, 109, 0.2) 0%, rgba(49, 225, 109, 0.05) 100%);',
                   },
                 }}
                 onClick={(event) => handleListItemClick(event, idx)}

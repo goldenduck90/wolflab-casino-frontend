@@ -25,8 +25,7 @@ function App() {
             <Route path="/staking" element={<Staking />} />
             <Route path="/coinflip" element={<Coinflip />} />
             <Route path="/dice" element={<DiceGame />} />
-            <Route path="/tower" element={<Empty />} />
-            <Route path="/roulette" element={<Empty />} />
+            <Route path="/mint" element={<Empty />} />
           </Routes>
         </Router>
         {/* </DatabaseProvider> */}

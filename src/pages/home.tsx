@@ -10,13 +10,7 @@ import { FaDiscord, FaTwitter } from 'react-icons/fa';
 
 import { useRef } from 'react';
 
-const images = [
-  '/images/nft1.jpg',
-  '/images/nft2.jpg',
-  '/images/nft3.jpg',
-  '/images/nft4.jpg',
-  '/images/nft5.jpg',
-];
+const images = ['/images/nft1.jpg', '/images/nft2.jpg', '/images/nft3.jpg', '/images/nft4.jpg'];
 
 const ORIGINALS_PANEL = [
   { title: 'COIN FLIP', logo: '/images/btn_coinflip.jpg', src: '/coinflip' },

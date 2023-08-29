@@ -69,7 +69,7 @@ export default function Header() {
   const [windowSize, setWindowSize] = useState(window.innerWidth);
 
   const web3Modal = new Web3Modal({
-    network: 'Binance',
+    network: 'Base',
     cacheProvider: true,
     providerOptions: getProviderOptions(),
   });
@@ -185,7 +185,7 @@ export default function Header() {
       <AppBar
         component="nav"
         sx={{
-          background: 'linear-gradient(90deg, rgb(26, 42, 62) 0%, rgb(11, 20, 30) 100%)',
+          background: 'linear-gradient(90deg, rgb(11,24,14) 0%, rgb(11,66,17) 100%)',
           zIndex: 10000,
         }}
       >

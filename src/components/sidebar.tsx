@@ -7,57 +7,60 @@ import {
   styled,
   Theme,
   CSSObject,
-  Drawer as MuiDrawer
+  Drawer as MuiDrawer,
 } from '@mui/material';
 import {
   CottageRounded as HomeIcon,
   AccountBalanceRounded as AccountBalanceIcon,
   CurrencyExchange as CurrencyExchangeIcon,
-  DomainRounded as DomainRoundedIcon,
+  // DomainRounded as DomainRoundedIcon,
   CasinoRounded as CasinoRoundedIcon,
   DocumentScannerRounded as DocumentScannerRoundedIcon,
-  SportsSoccer as RouletteIcon
+  // SportsSoccer as RouletteIcon,
 } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-
-// const menuItems = ['Home', 'Staking', 'About', 'Coin Flip', 'Dice Game', 'Tower', 'Lucky Wheel', 'Docs']
 
 const menuItems = [
   {
     name: 'Home',
     element: <HomeIcon sx={{ fontSize: '30px' }} />,
-    link: '/home'
+    link: '/home',
+    external: false,
   },
   {
     name: 'Staking',
     element: <AccountBalanceIcon sx={{ fontSize: '30px' }} />,
-    link: '/staking'
+    link: '/staking',
+    external: false,
   },
   {
     name: 'Coin Flip',
     element: <CurrencyExchangeIcon sx={{ fontSize: '30px' }} />,
-    link: '/coinflip'
+    link: '/coinflip',
+    external: false,
   },
   {
     name: 'Dice Game',
     element: <CasinoRoundedIcon sx={{ fontSize: '30px' }} />,
-    link: '/dice'
+    link: '/dice',
+    external: false,
   },
-  {
-    name: 'Tower',
-    element: <DomainRoundedIcon sx={{ fontSize: '30px' }} />,
-    link: '/tower'
-  },
-  {
-    name: 'Roulette',
-    element: <RouletteIcon sx={{ fontSize: '30px' }} />,
-    link: '/roulette'
-  },
+  // {
+  //   name: 'Tower',
+  //   element: <DomainRoundedIcon sx={{ fontSize: '30px' }} />,
+  //   link: '/tower'
+  // },
+  // {
+  //   name: 'Roulette',
+  //   element: <RouletteIcon sx={{ fontSize: '30px' }} />,
+  //   link: '/roulette'
+  // },
   {
     name: 'Docs',
     element: <DocumentScannerRoundedIcon sx={{ fontSize: '30px' }} />,
-    link: 'https://sui-heroes.gitbook.io/sui-heroes/'
-  }
+    link: 'https://wolf-game-lab.gitbook.io/',
+    external: true,
+  },
 ];
 
 const drawerWidth = 240;
@@ -70,7 +73,7 @@ const openedMixin = (_theme: Theme): CSSObject => ({
   //   easing: theme.transitions.easing.sharp,
   //   duration: theme.transitions.duration.enteringScreen,
   // }),
-  overflowX: 'hidden'
+  overflowX: 'hidden',
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -83,12 +86,12 @@ const closedMixin = (theme: Theme): CSSObject => ({
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`
-  }
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
 });
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open'
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
@@ -97,12 +100,12 @@ const Drawer = styled(MuiDrawer, {
   '& .MuiDrawer-paper': {},
   ...(open && {
     ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme)
+    '& .MuiDrawer-paper': openedMixin(theme),
   }),
   ...(!open && {
     ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme)
-  })
+    '& .MuiDrawer-paper': closedMixin(theme),
+  }),
 }));
 
 export default function SideBar() {
@@ -148,18 +151,15 @@ export default function SideBar() {
                   px: 2.5,
                   fontFamily: 'IndustryBold',
                   borderRadius: '8px 0 0 8px',
-                  borderRight:
-                    selectedIndex === idx
-                      ? '2px solid rgb(79, 255, 139)'
-                      : 'none',
+                  borderRight: selectedIndex === idx ? '2px solid rgb(79, 255, 139)' : 'none',
                   background:
                     selectedIndex === idx
                       ? 'linear-gradient(90deg, rgba(79, 255, 139, 0.2) 0%, rgba(79, 255, 139, 0.05) 100%) !important'
                       : '',
                   ':hover': {
                     background:
-                      'linear-gradient(90deg, rgba(150, 168, 194, 0.2) 0%, rgba(150, 168, 194, 0.05) 100%);'
-                  }
+                      'linear-gradient(90deg, rgba(150, 168, 194, 0.2) 0%, rgba(150, 168, 194, 0.05) 100%);',
+                  },
                 }}
                 onClick={(event) => handleListItemClick(event, idx)}
               >
@@ -168,11 +168,8 @@ export default function SideBar() {
                     minWidth: '50px',
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
-                    color:
-                      selectedIndex === idx
-                        ? 'rgb(79, 255, 139)'
-                        : 'rgb(150, 168, 194)',
-                    fontSize: '30px !important'
+                    color: selectedIndex === idx ? 'rgb(79, 255, 139)' : 'rgb(150, 168, 194)',
+                    fontSize: '30px !important',
                   }}
                 >
                   {item.element}
@@ -181,10 +178,7 @@ export default function SideBar() {
                   primary={item.name}
                   sx={{
                     opacity: open ? 1 : 0,
-                    color:
-                      selectedIndex === idx
-                        ? 'rgb(79, 255, 139)'
-                        : 'rgb(150, 168, 194)'
+                    color: selectedIndex === idx ? 'rgb(79, 255, 139)' : 'rgb(150, 168, 194)',
                   }}
                 ></ListItemText>
               </ListItemButton>

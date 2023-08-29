@@ -76,7 +76,7 @@ const mockRecentGames = [
 
 export default function Coinflip() {
   const wallet = useWeb3().walletAddress;
-  const { coinflip_flip, coinflip_claim, getABHbalance, getFlipLastPlay } = useProgram();
+  const { coinflip_flip, coinflip_claim, getWOLFIESbalance, getFlipLastPlay } = useProgram();
 
   const [loading, setLoading] = useState(false);
   const [gameStatus, setGameStatus] = useState(0);
@@ -103,7 +103,7 @@ export default function Coinflip() {
   }, [pendingAmount]);
 
   const getTokenAmount = async () => {
-    setTokenAmount(await getABHbalance());
+    setTokenAmount(await getWOLFIESbalance());
   };
 
   const getPendingAmount = async () => {
@@ -118,9 +118,9 @@ export default function Coinflip() {
         <h2>
           COIN FLIP&nbsp;&nbsp;:&nbsp;&nbsp;
           <span style={{ color: '#00ffff' }}>
-            {Math.floor((tokenAmount / 10 ** InfoCoinflip.token_decimals) * 100) / 100}
+            {Math.floor((tokenAmount / Math.pow(10, InfoCoinflip.token_decimals)) * 100) / 100}
           </span>{' '}
-          ABH
+          WOLFIES
         </h2>
       </div>
       {gameStatus === 0 ? (
@@ -155,7 +155,7 @@ export default function Coinflip() {
                     setSelectedAmount(idx);
                   }}
                 >
-                  {item + ' ABH'}
+                  {item + ' WOLFIES'}
                 </button>
               );
             })}
@@ -220,7 +220,7 @@ export default function Coinflip() {
             </div>
           </div>
           <h3 className="coinflip-gameboard-h3">
-            Bet amount : {InfoCoinflip.wager_amount[selectedAmount]} ABH
+            Bet amount : {InfoCoinflip.wager_amount[selectedAmount]} WOLFIES
           </h3>
           <div className="btn-flip-wrapper">
             <button
@@ -255,7 +255,7 @@ export default function Coinflip() {
             </div>
           </div>
           <h3 className="coinflip-gameboard-h3">
-            You lost {InfoCoinflip.wager_amount[selectedAmount]} ABH
+            You lost {InfoCoinflip.wager_amount[selectedAmount]} WOLFIES
           </h3>
           <div className="btn-flip-wrapper">
             <button

@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
 export interface ProgramContextState {
-    getABHbalance(): Promise<number>;
+    getWOLFIESbalance(): Promise<number>;
 
     // Staking
     getUserStakeData(): Promise<any>;

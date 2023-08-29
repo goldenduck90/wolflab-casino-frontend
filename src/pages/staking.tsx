@@ -11,9 +11,9 @@ export default function Staking() {
     claim_rewards,
     stake_token,
     unstake_token,
-    getABHbalance,
+    getWOLFIESbalance,
     getUserStakeData,
-    getStakingPoolData
+    getStakingPoolData,
     // getOwnedNfts,
     // getStakedNfts,
     // stake_nfts,
@@ -41,7 +41,7 @@ export default function Staking() {
   }, [wallet]);
 
   const getTokenAmount = async () => {
-    setTokenAmount(await getABHbalance());
+    setTokenAmount(await getWOLFIESbalance());
   };
 
   const getPoolData = async () => {
@@ -56,7 +56,7 @@ export default function Staking() {
     <div className="staking-dashboard">
       <div className="staking-main-panel">
         <div className="staking-main-panel-title">
-          <h2>ABH STAKING</h2>
+          <h2>WOLFIES STAKING</h2>
           <p>You can unstake from this pool anytime</p>
         </div>
         <div className="staking-main-panel-pool-info">
@@ -65,24 +65,25 @@ export default function Staking() {
             <p className="staking-main-panel-one-info-detail">
               {poolData == null
                 ? '-'
-                : poolData['tvl'] / 10 ** InfoStaking.token_decimals + ' ABH'}
+                : (
+                    BigInt(poolData['tvl']) / BigInt(Math.pow(10, InfoStaking.token_decimals))
+                  ).toString() + ' WOLFIES'}
             </p>
           </div>
           <div className="staking-main-panel-one-info">
             <p className="staking-main-panel-one-info-title">APY</p>
-            {/* <p className="staking-main-panel-one-info-detail">{poolData==null ? "-" : ((userData==null || Number(userData['stake_nft_count'])===0 ? poolData['apy'] : (Number(poolData['apy_nft'])+Number(poolData['apy_one_nft'])*(Number(userData['stake_nft_count'])-1)))/100)+" %"}</p> */}
             <p className="staking-main-panel-one-info-detail">
               {poolData == null
                 ? '-'
-                : (userData == null ? 0 : userData.rewardRate) / 100 + ' %'}
+                : (userData == null ? 0 : Number(userData.rewardRate)) / 100 + ' %'}
             </p>
           </div>
         </div>
         <div className="staking-main-panel-reward-info">
           <p className="staking-main-panel-reward-amount">
-            {tokenAmount / 10 ** InfoStaking.token_decimals}
+            {(BigInt(tokenAmount) / BigInt(Math.pow(10, InfoStaking.token_decimals))).toString()}
           </p>
-          <p className="staking-main-panel-reward-info-title">ABH Owned</p>
+          <p className="staking-main-panel-reward-info-title">WOLFIES Owned</p>
         </div>
         <div className="staking-main-panel-staking-info">
           <div className="staking-main-panel-one-info">
@@ -90,28 +91,28 @@ export default function Staking() {
             <p className="staking-main-panel-one-info-detail">
               {userData == null
                 ? '-'
-                : userData['amount'] / 10 ** InfoStaking.token_decimals +
-                  ' ABH'}
+                : Number(userData.amount) / Math.pow(10, InfoStaking.token_decimals) + ' WOLFIES'}
             </p>
           </div>
           <div className="staking-main-panel-one-info">
             <p className="staking-main-panel-one-info-title">Reward</p>
-            {/* <p className="staking-main-panel-one-info-detail">{userData==null? "-" : (userData['reward_amount']/(10**InfoStaking.token_decimals))+" ABH"}</p> */}
+            {/* <p className="staking-main-panel-one-info-detail">
+              {userData == null
+                ? '-'
+                : userData['reward_amount'] / Math.pow(10, InfoStaking.token_decimals) + ' WOLFIES'}
+            </p> */}
             <p className="staking-main-panel-one-info-detail">
               {userData == null
                 ? '-'
                 : (
-                    userData['pendingReward'] /
-                    10 ** InfoStaking.token_decimals
-                  ).toFixed(4) + ' ABH'}
+                    Number(userData.pendingReward) / Math.pow(10, InfoStaking.token_decimals)
+                  ).toFixed(4) + ' WOLFIES'}
             </p>
           </div>
         </div>
         <div className="staking-main-panel-action-part">
           <div className="staking-main-panel-action-detail">
-            <div className="staking-main-panel-action-detail-title">
-              Stake Amount
-            </div>
+            <div className="staking-main-panel-action-detail-title">Stake Amount</div>
             <div className="staking-main-panel-action-detail-amount-wrapper">
               <input
                 type="number"
@@ -145,18 +146,11 @@ export default function Staking() {
                 }
               }}
             >
-              {isStakeLoading ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : (
-                ''
-              )}{' '}
-              Stake
+              {isStakeLoading ? <CircularProgress size={16} color="inherit" /> : ''} Stake
             </Button>
           </div>
           <div className="staking-main-panel-action-detail">
-            <div className="staking-main-panel-action-detail-title">
-              Unstake Amount
-            </div>
+            <div className="staking-main-panel-action-detail-title">Unstake Amount</div>
             <div className="staking-main-panel-action-detail-amount-wrapper">
               <input
                 type="number"
@@ -187,12 +181,7 @@ export default function Staking() {
                 }
               }}
             >
-              {isUnstakeLoading ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : (
-                ''
-              )}{' '}
-              Unstake
+              {isUnstakeLoading ? <CircularProgress size={16} color="inherit" /> : ''} Unstake
             </Button>
           </div>
         </div>
@@ -202,7 +191,7 @@ export default function Staking() {
             sx={{
               width: '100%',
               borderRadius: '0.8rem',
-              fontFamily: 'IndustryBold'
+              fontFamily: 'IndustryBold',
             }}
             color="success"
             onClick={async () => {
@@ -219,12 +208,7 @@ export default function Staking() {
               }
             }}
           >
-            {isClaimLoading ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : (
-              ''
-            )}{' '}
-            Claim Reward
+            {isClaimLoading ? <CircularProgress size={16} color="inherit" /> : ''} Claim Reward
           </Button>
         </div>
       </div>
@@ -235,20 +219,12 @@ export default function Staking() {
           </div>
           <div className="nft-staking-one-panel-actions">
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button
-                variant="contained"
-                color="success"
-                onClick={async () => {}}
-              >
+              <Button variant="contained" color="success" onClick={async () => {}}>
                 Stake
               </Button>
             </div>
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button
-                variant="outlined"
-                color="success"
-                onClick={async () => {}}
-              >
+              <Button variant="outlined" color="success" onClick={async () => {}}>
                 Stake All
               </Button>
             </div>
@@ -260,20 +236,12 @@ export default function Staking() {
           </div>
           <div className="nft-staking-one-panel-actions">
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={async () => {}}
-              >
+              <Button variant="contained" color="primary" onClick={async () => {}}>
                 Unstake
               </Button>
             </div>
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={async () => {}}
-              >
+              <Button variant="outlined" color="primary" onClick={async () => {}}>
                 Unstake All
               </Button>
             </div>

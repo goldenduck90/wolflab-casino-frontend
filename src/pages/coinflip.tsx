@@ -118,7 +118,8 @@ export default function Coinflip() {
         <h2>
           COIN FLIP&nbsp;&nbsp;:&nbsp;&nbsp;
           <span style={{ color: '#00ffff' }}>
-            {Math.floor((tokenAmount / Math.pow(10, InfoCoinflip.token_decimals)) * 100) / 100}
+            {Math.floor((Number(tokenAmount) / Math.pow(10, InfoCoinflip.token_decimals)) * 100) /
+              100}
           </span>{' '}
           WOLFIES
         </h2>

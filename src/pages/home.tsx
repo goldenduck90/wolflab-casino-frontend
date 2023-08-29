@@ -22,7 +22,7 @@ const ORIGINALS_PANEL = [
   { title: 'COIN FLIP', logo: '/images/btn_coinflip.jpg', src: '/coinflip' },
   { title: 'DICE', logo: '/images/btn_dice.jpg', src: '/dice' },
   { title: 'TOWER', logo: '/images/btn_crash.jpg', src: '/tower' },
-  { title: 'LUCKY WHEEL', logo: '/images/btn_crash.jpg', src: '/home' },
+  // { title: 'LUCKY WHEEL', logo: '/images/btn_crash.jpg', src: '/home' },
 ];
 
 export default function Home() {

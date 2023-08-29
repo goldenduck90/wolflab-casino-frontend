@@ -1,393 +1,227 @@
-import {
-  Brightness7 as Brightness7Icon,
-  Brightness3 as Brightness3Icon,
-  ComputerTwoTone as ComputerIcon,
-  Person3TwoTone as PersonIcon,
-} from '@mui/icons-material';
+import React, { useEffect, useState, useRef } from 'react';
+import { openNotification } from '../utils/components';
 import { CircularProgress } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { openNotification, sleep } from '../utils/components';
 import { InfoDice } from '../utils/constants';
 import { useProgram } from '../utils/useProgram';
-// import Confetti from 'react-confetti';
-// import { useDatabse } from '../utils/useDatabase';
+import ReactDice, { ReactDiceRef } from 'react-dice-complete';
 import { useWeb3 } from '../utils/useWeb3';
 
-const mockRecentGames = [
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 1,
-    amount: InfoDice.wager_amount[0],
-    result: true,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 1,
-    amount: InfoDice.wager_amount[1],
-    result: false,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 2,
-    amount: InfoDice.wager_amount[3],
-    result: false,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 2,
-    amount: InfoDice.wager_amount[0],
-    result: true,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 2,
-    amount: InfoDice.wager_amount[5],
-    result: true,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 1,
-    amount: InfoDice.wager_amount[1],
-    result: true,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 1,
-    amount: InfoDice.wager_amount[1],
-    result: true,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 1,
-    amount: InfoDice.wager_amount[1],
-    result: true,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 1,
-    amount: InfoDice.wager_amount[1],
-    result: true,
-  },
-  {
-    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
-    select: 1,
-    amount: InfoDice.wager_amount[1],
-    result: true,
-  },
-];
-export default function Coinflip() {
+export default function DiceGame() {
   const wallet = useWeb3().walletAddress;
-  const { coinflip_flip, coinflip_claim, getWOLFIESbalance, getFlipLastPlay } = useProgram();
+  const { getWOLFIESbalance, dice_roll, dice_claim, getDiceLastPlay } = useProgram();
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
 
-  const [loading, setLoading] = useState(false);
-  const [gameStatus, setGameStatus] = useState(0);
-  const [pendingAmount, setPendingAmount] = useState(0);
-  const [selectedSide, setSelectedSide] = useState(false);
-  const [selectedAmount, setSelectedAmount] = useState(0);
+  const [userData, setUserData] = useState<any>(null);
   const [tokenAmount, setTokenAmount] = useState(0);
-  const [winNumber, setWinNumber] = useState(0);
-  const [recentGames] = useState<typeof mockRecentGames>(mockRecentGames);
+  const [selectedCase, setSelectedCase] = useState(2);
+  const [selectedAmount, setSelectedAmount] = useState(0);
+  const [isRoll, setIsRoll] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const reactDice1 = useRef<ReactDiceRef>(null);
+  const reactDice2 = useRef<ReactDiceRef>(null);
 
   useEffect(() => {
-    getPendingAmount();
-  }, [wallet]);
+    function handleWindowResize() {
+      setWindowSize(window.innerWidth);
+    }
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   useEffect(() => {
+    getUserData();
     const interval = setInterval(() => {
       getTokenAmount();
     }, 5000);
     return () => clearInterval(interval);
   }, [wallet]);
 
-  useEffect(() => {
-    if (pendingAmount > 0) setGameStatus(2);
-  }, [pendingAmount]);
-
   const getTokenAmount = async () => {
-    setTokenAmount(await getWOLFIESbalance());
+    setTokenAmount(Number(await getWOLFIESbalance()));
   };
 
-  const getPendingAmount = async () => {
-    let last = await getFlipLastPlay();
-    setPendingAmount(last.pendingAmount);
+  const getUserData = async () => {
+    // const ud = await getUserDiceData()
+    const ud = await getDiceLastPlay();
+    if (ud != null && ud.result && !ud.claimed) {
+      setUserData(ud);
+    } else setUserData(null);
   };
 
   return (
-    <div className="coinflip-dashboard">
-      {/* <Confetti width={window.innerWidth} height={window.innerHeight} numberOfPieces={200} wind={-0.01} recycle={false}/> */}
+    <div className="dice-dashboard">
       <div className="dashboard-header">
         <h2>
-          COIN FLIP&nbsp;&nbsp;:&nbsp;&nbsp;
+          DICE GAME&nbsp;&nbsp;:&nbsp;&nbsp;
           <span style={{ color: '#00ffff' }}>
-            {Math.floor((tokenAmount / Math.pow(10, InfoDice.token_decimals)) * 100) / 100}
+            {Math.floor((tokenAmount / 10 ** InfoDice.token_decimals) * 100) / 100}
           </span>{' '}
           WOLFIES
         </h2>
       </div>
-      {gameStatus === 0 ? (
-        <div className="coinflip-gameboard">
-          <div className="coin-select-panel">
-            <div
-              className={'front-coin coin-select-button ' + (selectedSide ? '' : 'active')}
-              onClick={() => {
-                setSelectedSide(false);
-              }}
-            >
-              <Brightness7Icon style={{ fontSize: '80px' }} />
+      <div className="dice-gameboard">
+        {userData == null ? (
+          <div className="dice-panel">
+            <div className="one-dice">
+              <ReactDice
+                faceColor="linear-gradient(268.42deg, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0.9) 100.18%)"
+                ref={reactDice1}
+                dieSize={windowSize > 770 ? 160 : 120}
+                dieCornerRadius={5}
+                defaultRoll={(Math.floor(new Date().getTime() / 19) % 6) + 1}
+                numDice={1}
+                rollTime={7}
+                outline
+                rollDone={() => {
+                  if (isRoll) reactDice1.current?.rollAll();
+                }}
+              />
             </div>
-            <div
-              className={'back-coin coin-select-button ' + (selectedSide ? 'active' : '')}
-              onClick={() => {
-                setSelectedSide(true);
-              }}
-            >
-              <Brightness3Icon style={{ fontSize: '80px' }} />
+            <div className="one-dice">
+              <ReactDice
+                faceColor="linear-gradient(268.42deg, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0.9) 100.18%)"
+                ref={reactDice2}
+                dieSize={windowSize > 770 ? 160 : 120}
+                dieCornerRadius={5}
+                defaultRoll={(Math.floor(new Date().getTime() / 139) % 6) + 1}
+                numDice={1}
+                rollTime={7}
+                outline
+                rollDone={() => {
+                  if (isRoll) reactDice2.current?.rollAll();
+                }}
+              />
             </div>
           </div>
-          <h3 className="coinflip-gameboard-h3">Choose your side</h3>
-          <div className="wager-select-panel">
-            {InfoDice.wager_amount.map((item, idx) => {
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  className={'btn-wager ' + (selectedAmount === idx ? 'active' : '')}
-                  onClick={() => {
-                    setSelectedAmount(idx);
-                  }}
-                >
-                  {item + ' WOLFIES'}
-                </button>
-              );
-            })}
+        ) : (
+          <div className="dice-panel">
+            <div className="one-dice first-dice">{userData.dice1}</div>
+            <div className="one-dice second-dice">{userData.dice2}</div>
           </div>
-          <h3 className="coinflip-gameboard-h3">Choose amount</h3>
-          <hr
-            style={{
-              width: '50%',
-              color: 'rgb(118, 139, 173)',
-              margin: '10px auto',
-              opacity: 0.25,
-            }}
-          />
-          <div className="btn-flip-wrapper">
-            <button
-              className="btn-flip"
-              onClick={async () => {
-                try {
-                  setGameStatus(1);
-                  let res = await coinflip_flip(
-                    selectedSide,
-                    InfoDice.wager_amount[selectedAmount]
-                  );
-                  if (res.result) {
-                    setWinNumber(winNumber + 1);
-                    setGameStatus(2);
-                  } else {
-                    setWinNumber(0);
-                    setGameStatus(3);
+        )}
+        {userData == null ? (
+          <div className="dice-option-panel">
+            <div className="case-select-panel">
+              <button
+                type="button"
+                className={'btn-case ' + (selectedCase === 2 ? 'active' : '')}
+                onClick={() => {
+                  setSelectedCase(2);
+                }}
+              >
+                Higher
+              </button>
+              <button
+                type="button"
+                className={'btn-case ' + (selectedCase === 1 ? 'active' : '')}
+                onClick={() => {
+                  setSelectedCase(1);
+                }}
+              >
+                Equal
+              </button>
+              <button
+                type="button"
+                className={'btn-case ' + (selectedCase === 0 ? 'active' : '')}
+                onClick={() => {
+                  setSelectedCase(0);
+                }}
+              >
+                Lower
+              </button>
+            </div>
+            <h3 className="dice-gameboard-h3">Choose case</h3>
+            <div className="wager-select-panel">
+              {InfoDice.wager_amount.map((item, idx) => {
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={'btn-wager ' + (selectedAmount === idx ? 'active' : '')}
+                    onClick={() => {
+                      setSelectedAmount(idx);
+                    }}
+                  >
+                    {item + ' WOLFIES'}
+                  </button>
+                );
+              })}
+            </div>
+            <h3 className="dice-gameboard-h3">Choose amount</h3>
+            <hr
+              style={{
+                width: '50%',
+                color: 'rgb(118, 139, 173)',
+                margin: '10px auto',
+                opacity: 0.25,
+              }}
+            />
+            <div className="btn-roll-wrapper">
+              <button
+                className="btn-roll"
+                onClick={async () => {
+                  setIsRoll(true);
+                  try {
+                    reactDice1.current?.rollAll();
+                    reactDice2.current?.rollAll();
+                    let res = await dice_roll(selectedCase, InfoDice.wager_amount[selectedAmount]);
+                    // console.log(res.events[0].parsedJson)
+
+                    setUserData(res);
+                  } catch (err: any) {
+                    console.log(err);
+                    openNotification('error', err.message);
                   }
-                  // let feedback = res.events[0].parsedJson;
-                  // try{
-                  //     putNewCoinflipGame({...feedback, result: feedback.result===1})
-                  // }catch(err){
-                  //     console.log(err)
-                  // }
-                  // setUserData(feedback)
-                  // let i = (new Date()).getTime() % 5;
-                  // if(i>=0) setWinNumber(winNumber+1)
-                  // else setWinNumber(0)
-                  // console.log(winNumber)
-                  // await sleep(1000)
-                  // setUserData({select: 1, result: i>=0?1:0, amount: COINFLIP_WAGER_AMOUNT[selectedAmount]})
-                } catch (err: any) {
-                  openNotification('error', err.message);
-                  setGameStatus(0);
-                }
-              }}
-            >
-              Flip
-            </button>
-          </div>
-        </div>
-      ) : gameStatus === 1 ? (
-        <div className="coinflip-gameboard">
-          <div className="coin-flipping-panel">
-            <div className="coin-flipping-image animation-front-image front-coin">
-              <Brightness7Icon style={{ fontSize: '160px' }} />
-            </div>
-            <div className="coin-flipping-image animation-back-image back-coin">
-              <Brightness3Icon style={{ fontSize: '160px' }} />
-            </div>
-          </div>
-          <h3 className="coinflip-gameboard-h3">F l i p p i n g . . .</h3>
-        </div>
-      ) : gameStatus === 2 ? (
-        <div className="coinflip-gameboard">
-          <div className="coin-select-panel">
-            <div className={'coin-result ' + (selectedSide === false ? 'front-coin' : 'back-coin')}>
-              {!selectedSide ? (
-                <Brightness7Icon style={{ fontSize: '160px' }} />
-              ) : (
-                <Brightness3Icon style={{ fontSize: '160px' }} />
-              )}
-            </div>
-          </div>
-          <h3 className="coinflip-gameboard-h3">
-            Bet amount : {InfoDice.wager_amount[selectedAmount]} WOLFIES
-          </h3>
-          <div className="btn-flip-wrapper">
-            <button
-              className="btn-flip"
-              disabled={loading}
-              onClick={async () => {
-                try {
-                  setLoading(true);
-                  await coinflip_claim();
-                  setLoading(false);
-                  setGameStatus(0);
-                  await sleep(100);
-                } catch (err: any) {
-                  openNotification('error', err.message);
-                  setLoading(false);
-                }
-              }}
-            >
-              {loading ? <CircularProgress size={20} /> : ''} Redeem Reward
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="coinflip-gameboard">
-          <div className="coin-select-panel">
-            <div className={'coin-result ' + (selectedSide === false ? 'back-coin' : 'front-coin')}>
-              {!selectedSide ? (
-                <Brightness3Icon style={{ fontSize: '160px' }} />
-              ) : (
-                <Brightness7Icon style={{ fontSize: '160px' }} />
-              )}
-            </div>
-          </div>
-          <h3 className="coinflip-gameboard-h3">
-            You lost {InfoDice.wager_amount[selectedAmount]} WOLFIES
-          </h3>
-          <div className="btn-flip-wrapper">
-            <button
-              className="btn-flip"
-              onClick={async () => {
-                setGameStatus(0);
-              }}
-            >
-              Back and Retry
-            </button>
-          </div>
-        </div>
-      )}
-      <div className="recent-game-header">Recent Games</div>
-      <div className="recent-game-body">
-        {recentGames.map((item, idx) => {
-          return (
-            <div
-              className={
-                'recent-game-item ' +
-                ((item.result && item.select === 1) || (item.result === false && item.select === 2)
-                  ? 'recent-game-blue-item '
-                  : 'recent-game-red-item ') +
-                (idx === 0 ? 'recent-game-top-item ' : '') +
-                (idx === recentGames.length - 1 ? 'recent-game-bottom-item' : '')
-              }
-              key={idx}
-            >
-              <div
-                className={
-                  'recent-game-left-right recent-game-left ' +
-                  ((item.result && item.select === 1) ||
-                  (item.result === false && item.select === 2)
-                    ? 'win-panel'
-                    : '')
-                }
+                  setIsRoll(false);
+                }}
               >
-                <div className="item">
-                  <div className="logo left-logo">
-                    {item.select === 1 ? (
-                      <PersonIcon className="logo-icon" />
-                    ) : (
-                      <ComputerIcon className="logo-icon" />
-                    )}
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="item-name">
-                    {item.select === 1 ? item.player.substr(0, 8) : '(Flip Bot)'}
-                  </div>
-                </div>
-                {((item.result && item.select === 1) ||
-                  (item.result === false && item.select === 2)) && (
-                  <div className="item item-flex">
-                    <div className="bet-amount">
-                      <div className="coin-image" />
-                      <div className="amount">{item.amount}</div>
-                    </div>
-                    <div className="bet-image">
-                      <img src="/images/crown.svg" width="14px" alt="crown" />
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="recent-game-center">
-                {(item.result && item.select === 1) ||
-                (item.result === false && item.select === 2) ? (
-                  <div className="front-coin coin">
-                    <Brightness7Icon />
-                  </div>
-                ) : (
-                  <div className="back-coin coin">
-                    <Brightness3Icon />
-                  </div>
-                )}
-              </div>
-              <div
-                className={
-                  'recent-game-left-right recent-game-right ' +
-                  ((item.result && item.select === 1) ||
-                  (item.result === false && item.select === 2)
-                    ? ''
-                    : 'win-panel')
-                }
-              >
-                <div className="item">
-                  <div className="logo right-logo">
-                    {item.select === 1 ? (
-                      <ComputerIcon className="logo-icon" />
-                    ) : (
-                      <PersonIcon className="logo-icon" />
-                    )}
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="item-name">
-                    {item.select === 2 ? item.player.substr(0, 8) : '(Flip Bot)'}
-                  </div>
-                </div>
-                {((item.result && item.select === 2) ||
-                  (item.result === false && item.select === 1)) && (
-                  <div className="item item-flex">
-                    <div className="bet-amount">
-                      <div className="coin-image" />
-                      <div className="amount">{item.amount}</div>
-                    </div>
-                    <div className="bet-image">
-                      <img src="/images/crown.svg" width="14px" alt="crown" />
-                    </div>
-                  </div>
-                )}
-              </div>
+                Roll
+              </button>
             </div>
-          );
-        })}
-        <div className="show-more">
-          <button className="btn-more">SHOW MORE</button>
-        </div>
+          </div>
+        ) : userData.result ? (
+          <div className="dice-option-panel dice-result">
+            <div className="dice-result-banner">👍</div>
+            <h3 className="dice-result-description win-result">You win</h3>
+            <div className="btn-roll-wrapper">
+              <button
+                className="btn-redeem"
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    await dice_claim();
+                    setLoading(false);
+                    setUserData(null);
+                  } catch (err: any) {
+                    openNotification('error', err.message);
+                    setLoading(false);
+                  }
+                }}
+              >
+                {loading ? <CircularProgress color="success" size={20} /> : ''} Redeem Reward
+              </button>
+            </div>
+            ``
+          </div>
+        ) : (
+          <div className="dice-option-panel dice-result">
+            <div className="dice-result-banner">👎</div>
+            <h3 className="dice-result-description lost-result">You lost</h3>
+            <div className="btn-roll-wrapper">
+              <button
+                className="btn-back"
+                onClick={async () => {
+                  setUserData(null);
+                }}
+              >
+                Back and Retry
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

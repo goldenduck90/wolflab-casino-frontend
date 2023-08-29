@@ -1012,180 +1012,190 @@ body {
 
 	.dashboard-header {
 		h2 {
-			color: rgb(118, 139, 173);
+			color: rgb(255, 255, 255);
 		}
 	}
 
-	.coinflip-gameboard {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		margin: 20px;
-		border-radius: 16px;
-		border: 2px solid rgb(26, 41, 61);
-		background: linear-gradient(268.42deg, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0) 100.18%);
+	.coinflip-gameboard-wrapper {
 		width: 80%;
-		height: 560px;
 		max-width: 940px;
+		background: linear-gradient(45deg, white 0%, green 50%, white 100%);
+		border-radius: 18px;
+		margin: 20px;
+		padding: 4px;
 
-		.coin-select-panel {
+		.coinflip-gameboard {
+			padding: 10px;
 			display: flex;
-			gap: 60px;
-			margin-top: 20px;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			border-radius: 16px;
+			background: linear-gradient(268.42deg, rgb(16, 29, 21) 0%, rgb(4, 22, 4) 100.18%);
+			height: 560px;
 
-			@media(max-width: 560px) {
-				gap: 30px;
-			}
-
-			.coin-select-button {
-				cursor: pointer;
+			.coin-select-panel {
 				display: flex;
-				align-items: center;
-				justify-content: center;
-				border-radius: 100%;
-				width: 120px;
-				height: 120px;
-				opacity: 0.2;
-				transition: all 0.3s ease-in 0s;
+				gap: 60px;
+				margin-top: 20px;
 
-				&.active {
-					opacity: 1;
+				@media(max-width: 560px) {
+					gap: 30px;
 				}
 
-				@media(max-width:586px) {
-					width: 80px;
-					height: 80px;
-				}
-			}
-
-			.front-coin {
-				background: linear-gradient(149.33deg, rgb(79, 255, 139) 7.45%, rgb(75, 136, 255) 98.66%);
-				box-shadow: rgb(75, 136, 255) 0px 0px 30px;
-				color: rgba(0, 24, 46, 0.5);
-			}
-
-			.back-coin {
-				background: linear-gradient(149.33deg, rgb(227, 146, 255) 7.45%, rgb(154, 26, 255) 98.66%);
-				box-shadow: rgb(93, 36, 255) 0px 0px 30px;
-				color: rgba(46, 0, 143, 0.5);
-			}
-
-			.coin-result {
-				cursor: pointer;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				border-radius: 100%;
-				width: 240px;
-				height: 240px;
-			}
-		}
-
-		.coin-flipping-panel {
-			margin-top: 20px;
-			position: relative;
-			width: 240px;
-			height: 240px;
-			text-align: center;
-
-			.coin-flipping-image {
-				position: absolute;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 240px;
-				height: 240px;
-				border-radius: 100%;
-			}
-
-			.front-coin {
-				background: linear-gradient(149.33deg, rgb(79, 255, 139) 7.45%, rgb(75, 136, 255) 98.66%);
-				color: rgba(0, 24, 46, 0.5);
-			}
-
-			.back-coin {
-				background: linear-gradient(149.33deg, rgb(227, 146, 255) 7.45%, rgb(154, 26, 255) 98.66%);
-				color: rgba(46, 0, 143, 0.5);
-			}
-
-			.animation-front-image {
-				animation-name: flipping-head;
-				animation-timing-function: linear;
-				animation-duration: 2s;
-				animation-iteration-count: infinite;
-			}
-
-			.animation-back-image {
-				animation-name: flipping-tail;
-				animation-timing-function: linear;
-				animation-duration: 2s;
-				animation-iteration-count: infinite;
-			}
-		}
-
-		.wager-select-panel {
-			width: 80%;
-
-			.btn-wager {
-				cursor: pointer;
-				position: relative;
-				border: 1px solid transparent;
-				border-radius: 8px;
-				color: rgb(118, 139, 173);
-				background-color: rgb(36, 47, 66);
-				font-size: 20px;
-				font-family: "IndustryBlack";
-				margin: 10px 20px;
-				width: 150px;
-				height: 62px;
-				transition: all 0.3s ease-in 0s;
-
-				&.active {
-					border: 1px solid rgb(79, 255, 139);
-					color: rgb(79, 255, 139);
-				}
-
-				@media(max-width: 980px) {
+				.coin-select-button {
+					cursor: pointer;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border-radius: 100%;
 					width: 120px;
+					height: 120px;
+					opacity: 0.2;
+					transition: all 0.3s ease-in 0s;
+
+					&.active {
+						opacity: 1;
+					}
+
+					@media(max-width:586px) {
+						width: 80px;
+						height: 80px;
+					}
 				}
 
-				@media(max-width: 850px) {
-					height: 50px;
-					font-size: 16px;
+				.front-coin {
+					background: linear-gradient(149.33deg, rgb(79, 255, 139) 7.45%, rgb(75, 136, 255) 98.66%);
+					box-shadow: rgb(75, 136, 255) 0px 0px 30px;
+					color: rgba(0, 24, 46, 0.5);
 				}
 
-				@media(max-width: 586px) {
-					width: 80px;
-					font-size: 12px;
-					margin: 5px;
+				.back-coin {
+					background: linear-gradient(149.33deg, rgb(227, 146, 255) 7.45%, rgb(154, 26, 255) 98.66%);
+					box-shadow: rgb(93, 36, 255) 0px 0px 30px;
+					color: rgba(46, 0, 143, 0.5);
+				}
+
+				.coin-result {
+					cursor: pointer;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border-radius: 100%;
+					width: 240px;
+					height: 240px;
 				}
 			}
-		}
 
-		.coinflip-gameboard-h3 {
-			color: #D0DAEB
-		}
+			.coin-flipping-panel {
+				margin-top: 20px;
+				position: relative;
+				width: 240px;
+				height: 240px;
+				text-align: center;
 
-		.btn-flip-wrapper {
-			margin: 1em auto;
-			width: 100%;
-			text-align: center;
+				.coin-flipping-image {
+					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 240px;
+					height: 240px;
+					border-radius: 100%;
+				}
 
-			.btn-flip {
-				cursor: pointer;
-				width: 200px;
-				height: 60px;
-				border: 1px solid transparent;
-				border-radius: 8px;
-				color: rgb(118, 139, 173);
-				background-color: rgb(36, 47, 66);
-				font-size: 20px;
-				font-family: "IndustryBlack";
+				.front-coin {
+					background: linear-gradient(149.33deg, rgb(79, 255, 139) 7.45%, rgb(75, 136, 255) 98.66%);
+					color: rgba(0, 24, 46, 0.5);
+				}
 
-				&:hover {
-					background-color: rgb(118, 139, 173);
-					color: rgb(36, 47, 66);
+				.back-coin {
+					background: linear-gradient(149.33deg, rgb(227, 146, 255) 7.45%, rgb(154, 26, 255) 98.66%);
+					color: rgba(46, 0, 143, 0.5);
+				}
+
+				.animation-front-image {
+					animation-name: flipping-head;
+					animation-timing-function: linear;
+					animation-duration: 2s;
+					animation-iteration-count: infinite;
+				}
+
+				.animation-back-image {
+					animation-name: flipping-tail;
+					animation-timing-function: linear;
+					animation-duration: 2s;
+					animation-iteration-count: infinite;
+				}
+			}
+
+			.wager-select-panel {
+				width: 80%;
+
+				.btn-wager {
+					cursor: pointer;
+					position: relative;
+					border: 1px solid transparent;
+					border-radius: 8px;
+					color: rgb(255, 255, 255);
+					background-color: rgb(5, 58, 4);
+					font-size: 20px;
+					font-family: "IndustryBlack";
+					margin: 10px 20px;
+					width: 150px;
+					height: 62px;
+					transition: all 0.3s ease-in 0s;
+
+					&:hover {
+						color: rgb(79, 255, 139);
+					}
+
+					&.active {
+						border: 2px solid rgb(255, 255, 255);
+						color: rgb(79, 255, 139);
+					}
+
+					@media(max-width: 980px) {
+						width: 120px;
+					}
+
+					@media(max-width: 850px) {
+						height: 50px;
+						font-size: 16px;
+					}
+
+					@media(max-width: 586px) {
+						width: 80px;
+						font-size: 12px;
+						margin: 5px;
+					}
+				}
+			}
+
+			.coinflip-gameboard-h3 {
+				color: rgb(190, 202, 223)
+			}
+
+			.btn-flip-wrapper {
+				margin: 1em auto;
+				width: 100%;
+				text-align: center;
+
+				.btn-flip {
+					cursor: pointer;
+					width: 200px;
+					height: 60px;
+					border: 1px solid transparent;
+					border-radius: 8px;
+					color: white;
+					background-color: rgb(5, 58, 4);
+					font-size: 20px;
+					font-family: "IndustryBlack";
+
+					&:hover {
+						border: 1px solid rgb(35, 190, 69);
+						color: #00FF00;
+					}
 				}
 			}
 		}
@@ -1411,15 +1421,17 @@ body {
 			button {
 				width: 150px;
 				height: 40px;
-				border: 3px solid rgb(254, 232, 126);
+				border: 3px solid rgb(18, 156, 13);
 				border-radius: 8px;
 				color: #fff;
 				background: linear-gradient(rgb(7, 11, 16) 0%, rgba(7, 11, 16, 0.3) 100%);
 				font-size: 14px;
 				font-family: "IndustryBlack";
+				cursor: pointer;
 
 				&:hover {
-					filter: brightness(120%)
+					color: #00FF00;
+					border: 3px solid rgb(67, 243, 61);
 				}
 			}
 		}
@@ -1439,223 +1451,232 @@ body {
 		text-align: left;
 
 		h2 {
-			color: rgb(118, 139, 173);
+			color: rgb(255, 255, 255);
 		}
 	}
 
-	.dice-gameboard {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		border-radius: 16px;
-		border: 2px solid rgb(26, 41, 61);
-		background: linear-gradient(268.42deg, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0) 100.18%);
+	.dice-gameboard-wrapper {
 		width: 80%;
-		height: 560px;
 		max-width: 940px;
-		padding-left: 30px;
-		padding-right: 30px;
+		background: linear-gradient(45deg, white 0%, green 50%, white 100%);
+		border-radius: 18px;
+		margin: 20px;
+		padding: 4px;
 
-		.dice-panel,
-		.dice-option-panel {
-			flex-grow: 1;
-			height: 100%;
-
+		.dice-gameboard {
+			padding: 10px;
 			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
-
-		.dice-panel {
-			width: 30%;
-			position: relative;
-
-			.one-dice {
-				flex-grow: 1;
-				height: 50%;
-				display: flex;
-				align-items: center;
-				font-size: 180px;
-				font-family: "IndustryMedium";
-			}
-
-			.first-dice {
-				color: rgb(41, 216, 88);
-			}
-
-			.second-dice {
-				color: #3ba0d3
-			}
-
-			.case-result {
-				position: absolute;
-				font-size: 20px;
-				font-family: "IndustryBlack";
-				color: rgb(118, 139, 173);
-				top: calc(50% - 13px);
-			}
-		}
-
-		.dice-option-panel {
-			width: 70%;
 			justify-content: center;
+			align-items: center;
+			border-radius: 16px;
+			background: linear-gradient(268.42deg, rgb(16, 29, 21) 0%, rgb(4, 22, 4) 100.18%);
+			height: 560px;
+			padding-left: 30px;
+			padding-right: 30px;
 
-			.case-select-panel {
-				width: 100%;
-				max-width: 400px;
+			.dice-panel,
+			.dice-option-panel {
+				flex-grow: 1;
+				height: 100%;
 
-				.btn-case {
-					position: relative;
-					border: 1px solid transparent;
-					border-radius: 8px;
-					color: rgb(118, 139, 173);
-					background-color: rgb(36, 47, 66);
-					font-size: 20px;
-					font-family: "IndustryBlack";
-					margin: 10px 20px;
-					width: 80px;
-					height: 62px;
-					transition: all 0.3s ease-in 0s;
-
-					&.active {
-						border: 1px solid rgb(228, 181, 26);
-						color: rgb(228, 181, 26);
-					}
-				}
+				display: flex;
+				flex-direction: column;
+				align-items: center;
 			}
-
-			.wager-select-panel {
-				width: 100%;
-				max-width: 400px;
-
-				.btn-wager {
-					cursor: pointer;
-					position: relative;
-					border: 1px solid transparent;
-					border-radius: 8px;
-					color: rgb(118, 139, 173);
-					background-color: rgb(36, 47, 66);
-					font-size: 20px;
-					font-family: "IndustryBlack";
-					margin: 10px 20px;
-					width: 150px;
-					height: 62px;
-					transition: all 0.3s ease-in 0s;
-
-					&.active {
-						border: 1px solid rgb(79, 255, 139);
-						color: rgb(79, 255, 139);
-					}
-				}
-			}
-
-			.dice-gameboard-h3 {
-				color: #D0DAEB;
-
-				@media (max-width: 470px) {
-					margin: 5px;
-				}
-			}
-
-			.btn-roll-wrapper {
-				margin: 1em auto;
-				width: 100%;
-				text-align: center;
-
-				button {
-					cursor: pointer;
-					width: 200px;
-					height: 60px;
-					border: 1px solid transparent;
-					border-radius: 8px;
-					color: rgb(118, 139, 173);
-					background-color: rgb(36, 47, 66);
-					font-size: 20px;
-					font-family: "IndustryBlack";
-
-					&:hover {
-						background-color: rgb(118, 139, 173);
-						color: rgb(36, 47, 66);
-					}
-
-					&.btn-redeem {
-						border: 1px solid rgb(79, 255, 139);
-						color: rgb(41, 216, 88);
-
-						&:hover {
-							background: linear-gradient(90deg, rgba(79, 255, 139, 0.2) 0%, rgba(79, 255, 139, 0.05) 100%) !important;
-						}
-					}
-				}
-			}
-		}
-
-		.dice-result {
-			.dice-result-banner {
-				font-size: 80px;
-			}
-
-			.dice-result-description {
-				font-size: 60px;
-				font-family: "IndustryMedium";
-				color: rgb(180, 188, 202);
-
-				&.win-result {
-					color: rgb(41, 216, 88);
-				}
-			}
-		}
-
-		@media (max-width: 770px) {
-			flex-direction: column;
-			background: linear-gradient(to top, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0) 100.18%);
 
 			.dice-panel {
-				width: 100%;
-				flex-direction: row;
-				justify-content: center;
+				width: 30%;
+				position: relative;
 
 				.one-dice {
-					justify-content: center;
-					font-size: 100px;
+					flex-grow: 1;
+					height: 50%;
+					display: flex;
+					align-items: center;
+					font-size: 180px;
+					font-family: "IndustryMedium";
+				}
+
+				.first-dice {
+					color: rgb(41, 216, 88);
+				}
+
+				.second-dice {
+					color: #3ba0d3
+				}
+
+				.case-result {
+					position: absolute;
+					font-size: 20px;
+					font-family: "IndustryBlack";
+					color: rgb(118, 139, 173);
+					top: calc(50% - 13px);
 				}
 			}
 
 			.dice-option-panel {
-				width: 100%;
-
-				button {
-					height: 40px !important;
-					font-size: 14px !important;
-				}
+				width: 70%;
+				justify-content: center;
 
 				.case-select-panel {
-					display: flex;
-					justify-content: space-between;
+					width: 100%;
+					max-width: 400px;
 
 					.btn-case {
-						font-size: 14px;
+						position: relative;
+						border: 1px solid transparent;
+						border-radius: 8px;
+						color: rgb(118, 139, 173);
+						background-color: rgb(36, 47, 66);
+						font-size: 20px;
+						font-family: "IndustryBlack";
+						margin: 10px 20px;
+						width: 80px;
+						height: 62px;
+						transition: all 0.3s ease-in 0s;
+
+						&.active {
+							border: 1px solid rgb(228, 181, 26);
+							color: rgb(228, 181, 26);
+						}
 					}
 				}
 
 				.wager-select-panel {
+					width: 100%;
+					max-width: 400px;
+
 					.btn-wager {
-						margin: 10px 10px;
-						width: 90px;
+						cursor: pointer;
+						position: relative;
+						border: 1px solid transparent;
+						border-radius: 8px;
+						color: rgb(255, 255, 255);
+						background-color: rgb(5, 58, 4);
+						font-size: 20px;
+						font-family: "IndustryBlack";
+						margin: 10px 20px;
+						width: 150px;
+						height: 62px;
+						transition: all 0.3s ease-in 0s;
+
+						&:hover {
+							color: rgb(79, 255, 139);
+						}
+
+						&.active {
+							border: 2px solid rgb(255, 255, 255);
+							color: rgb(79, 255, 139);
+						}
+					}
+				}
+
+				.dice-gameboard-h3 {
+					color: #D0DAEB;
+
+					@media (max-width: 470px) {
+						margin: 5px;
+					}
+				}
+
+				.btn-roll-wrapper {
+					margin: 1em auto;
+					width: 100%;
+					text-align: center;
+
+					button {
+						cursor: pointer;
+						width: 200px;
+						height: 60px;
+						border: 1px solid transparent;
+						border-radius: 8px;
+						color: rgb(118, 139, 173);
+						background-color: rgb(36, 47, 66);
+						font-size: 20px;
+						font-family: "IndustryBlack";
+
+						&:hover {
+							background-color: rgb(118, 139, 173);
+							color: rgb(36, 47, 66);
+						}
+
+						&.btn-redeem {
+							border: 1px solid rgb(79, 255, 139);
+							color: rgb(41, 216, 88);
+
+							&:hover {
+								background: linear-gradient(90deg, rgba(79, 255, 139, 0.2) 0%, rgba(79, 255, 139, 0.05) 100%) !important;
+							}
+						}
 					}
 				}
 			}
 
 			.dice-result {
-				button {
-					height: 60px !important;
-					font-size: 20px !important;
+				.dice-result-banner {
+					font-size: 80px;
+				}
+
+				.dice-result-description {
+					font-size: 60px;
+					font-family: "IndustryMedium";
+					color: rgb(180, 188, 202);
+
+					&.win-result {
+						color: rgb(41, 216, 88);
+					}
+				}
+			}
+
+			@media (max-width: 770px) {
+				flex-direction: column;
+				background: linear-gradient(to top, rgb(26, 41, 61) 0%, rgba(26, 41, 61, 0) 100.18%);
+
+				.dice-panel {
+					width: 100%;
+					flex-direction: row;
+					justify-content: center;
+
+					.one-dice {
+						justify-content: center;
+						font-size: 100px;
+					}
+				}
+
+				.dice-option-panel {
+					width: 100%;
+
+					button {
+						height: 40px !important;
+						font-size: 14px !important;
+					}
+
+					.case-select-panel {
+						display: flex;
+						justify-content: space-between;
+
+						.btn-case {
+							font-size: 14px;
+						}
+					}
+
+					.wager-select-panel {
+						.btn-wager {
+							margin: 10px 10px;
+							width: 90px;
+						}
+					}
+				}
+
+				.dice-result {
+					button {
+						height: 60px !important;
+						font-size: 20px !important;
+					}
 				}
 			}
 		}
 	}
-
-
 }
 
 .ant-notification {

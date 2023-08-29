@@ -1526,14 +1526,19 @@ body {
 						position: relative;
 						border: 1px solid transparent;
 						border-radius: 8px;
-						color: rgb(118, 139, 173);
-						background-color: rgb(36, 47, 66);
+						cursor: pointer;
+						color: rgb(255, 255, 255);
+						background-color: rgb(5, 58, 4);
 						font-size: 20px;
 						font-family: "IndustryBlack";
 						margin: 10px 20px;
 						width: 80px;
 						height: 62px;
 						transition: all 0.3s ease-in 0s;
+
+						&:hover {
+							color: rgb(79, 255, 139);
+						}
 
 						&.active {
 							border: 1px solid rgb(228, 181, 26);
@@ -1590,15 +1595,16 @@ body {
 						height: 60px;
 						border: 1px solid transparent;
 						border-radius: 8px;
-						color: rgb(118, 139, 173);
-						background-color: rgb(36, 47, 66);
+						color: white;
+						background-color: rgb(5, 58, 4);
 						font-size: 20px;
 						font-family: "IndustryBlack";
 
 						&:hover {
-							background-color: rgb(118, 139, 173);
-							color: rgb(36, 47, 66);
+							border: 1px solid rgb(35, 190, 69);
+							color: #00FF00;
 						}
+
 
 						&.btn-redeem {
 							border: 1px solid rgb(79, 255, 139);

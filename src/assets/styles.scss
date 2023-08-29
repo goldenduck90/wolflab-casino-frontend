@@ -186,7 +186,8 @@ body {
 
 			&.slider-1 {
 				background-image: url('./images/background.png');
-				background-size: 100% 100%;
+				background-size: auto auto;
+				background-position: center;
 				display: flex;
 				align-items: center;
 				justify-content: center;

@@ -13,10 +13,9 @@ import { useRef } from 'react';
 const images = ['/images/nft1.jpg', '/images/nft2.jpg', '/images/nft3.jpg', '/images/nft4.jpg'];
 
 const ORIGINALS_PANEL = [
-  { title: 'COIN FLIP', logo: '/images/btn_coinflip.jpg', src: '/coinflip' },
-  { title: 'DICE', logo: '/images/btn_dice.jpg', src: '/dice' },
-  { title: 'TOWER', logo: '/images/btn_crash.jpg', src: '/tower' },
-  // { title: 'LUCKY WHEEL', logo: '/images/btn_crash.jpg', src: '/home' },
+  { title: 'DICE', logo: '/images/btn_dice.png', src: '/dice' },
+  { title: 'COIN FLIP', logo: '/images/btn_coinflip.png', src: '/coinflip' },
+  { title: 'CRASH', logo: '/images/btn_crash.png', src: '/tower' },
 ];
 
 export default function Home() {
@@ -77,7 +76,7 @@ export default function Home() {
     <div className="home-dashboard">
       <Slider {...settings} className="home-slider">
         <div className="one-slider slider-1">
-          <h2>A COLLECTION OF 4000 WOLFIES</h2>
+          <h2>A COLLECTION OF 5555 WOLFIES</h2>
           <div className="nft-slider-wrapper">
             <Slider {...settingSlider1} className="nft-slider">
               {images.map((image, idx) => {
@@ -92,12 +91,11 @@ export default function Home() {
         </div>
         <div className="one-slider slider-2">
           <div className="line-1">
-            {/* <h2>YOU CAN GET REWARDS FROM</h2> */}
             <h1>WOLFIES STAKING</h1>
           </div>
           <div className="line-2">
             <p>Stake $WOLFIES TOKEN with WOLFIES NFT to get SUPERCHARGED APY rewards.</p>
-            <p>The more the NFT's you STAKE the more your APY.</p>
+            <p>The more NFTs you stake, the more your APY.</p>
           </div>
           <div className="line-3">
             <Button
@@ -115,11 +113,10 @@ export default function Home() {
         <div className="one-slider slider-3">
           <div className="line-1">
             <h1>COINFLIP</h1>
-            <h2>DOUBLE YOUR WAGERS OR NOTHING.</h2>
+            <h2>DOUBLE OR NOTHING.</h2>
           </div>
           <div className="line-2">
-            <p>You bet WOLFIES token. If you win, you get 2 times token amount you bet.</p>
-            <p>Whereas, you will lost all tokens</p>
+            <p>Bet WOLFIES, if you win get double back.</p>
           </div>
           <div className="line-3">
             <Button

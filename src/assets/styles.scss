@@ -185,17 +185,13 @@ body {
 			user-select: none;
 
 			&.slider-1 {
-				background-image: url('./images/background.png');
 				background-size: auto auto;
 				background-position: center;
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				flex-direction: column;
-
-				@media (max-width:600px) {
-					background-image: url('./images/background2.png');
-				}
+				background-image: url('./images/background2.png');
 
 				h2 {
 					color: rgb(255, 255, 255);
@@ -1603,12 +1599,14 @@ body {
 		.minting-panel-nft-hero {
 			margin-top: 40px;
 		}
+
 		.minting-panel-available-info {
 			margin-top: 20px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			flex-direction: row;
+
 			.minting-panel-available-amount {
 				color: white;
 				font-size: 24px;

@@ -7,14 +7,14 @@ export const InfoStaking = {
 
 export const InfoCoinflip = {
     contract: '0xe63B516832A411984A3135C4601c42CbA8327551',
-    wager_amount: [1, 2, 3, 10, 25, 50],
+    wager_amount: [500, 1000, 2000, 4000, 5000, 10000],
     token_type: '0x314d7114d2dDdd32e9d6AAB5be32234f4ceBcE63',
     token_decimals: 18
 }
 
 export const InfoDice = {
     contract: '0x7B7e95aB069286568D0c2E263B4979fCc8B41B88',
-    wager_amount: [1, 2, 3, 10, 25, 50],
+    wager_amount: [500, 1000, 2000, 4000, 5000, 10000],
     token_type: '0x314d7114d2dDdd32e9d6AAB5be32234f4ceBcE63',
     token_decimals: 18
 }

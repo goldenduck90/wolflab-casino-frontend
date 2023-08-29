@@ -37,3 +37,4 @@ debug.log*
 
 src/config/abi/types
 
+package-lock.json

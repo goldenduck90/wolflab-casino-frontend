@@ -189,28 +189,34 @@ export default function Home() {
         </div>
       </div>
       {/* <div className="home-roadmap">
-            <div className="home-roadmap-banner">
-                <div className="dot"/><p>Our Roadmap</p><div className="dot"/>
-            </div>
-            <div className="home-roadmap-header">
-                <p>SUIHEROES <span>Project Plan</span></p>
-            </div>
-            <div className="home-roadmap-content">
-                <div className="grid-container">
-                {
-                    RoadmapContent.map((feature, index)=>{
-                        return <div key={index} className="home-roadmap-piece">
-                            <div className="home-roadmap-piece-no"><p>{index+1}</p></div>
-                            <div className="home-roadmap-piece-content">
-                                <p className="home-roadmap-piece-content-main">{feature.main}</p>
-                                <p className="home-roadmap-piece-content-details">{feature.details}</p>
-                            </div>
-                        </div>
-                    })
-                }
+        <div className="home-roadmap-banner">
+          <div className="dot" />
+          <p>Our Roadmap</p>
+          <div className="dot" />
+        </div>
+        <div className="home-roadmap-header">
+          <p>
+            SUIHEROES <span>Project Plan</span>
+          </p>
+        </div>
+        <div className="home-roadmap-content">
+          <div className="grid-container">
+            {RoadmapContent.map((feature, index) => {
+              return (
+                <div key={index} className="home-roadmap-piece">
+                  <div className="home-roadmap-piece-no">
+                    <p>{index + 1}</p>
+                  </div>
+                  <div className="home-roadmap-piece-content">
+                    <p className="home-roadmap-piece-content-main">{feature.main}</p>
+                    <p className="home-roadmap-piece-content-details">{feature.details}</p>
+                  </div>
                 </div>
-            </div>
-        </div> */}
+              );
+            })}
+          </div>
+        </div>
+      </div> */}
       {/* <div className="home-partner">
             <div className="home-partner-banner">
                 <div className="dot"/><p>Our Partner</p><div className="dot"/>
@@ -237,7 +243,7 @@ export default function Home() {
           <button
             className="btn-community btn-twitter"
             onClick={() => {
-              window.location.href = 'https://twitter.com/';
+              window.location.href = 'https://twitter.com/WOLFGAMELAB';
             }}
           >
             <FaTwitter fontSize="30px" />
@@ -246,7 +252,7 @@ export default function Home() {
           <button
             className="btn-community btn-discord"
             onClick={() => {
-              window.location.href = 'http://discord.gg/eAGH6JPZVD';
+              window.location.href = 'https://discord.gg/XceD7YDA8f';
             }}
           >
             <FaDiscord fontSize="30px" />

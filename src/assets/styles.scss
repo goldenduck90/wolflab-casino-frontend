@@ -171,7 +171,7 @@ body {
 		.slick-dots {
 			.slick-active {
 				div {
-					background-color: red !important;
+					background-color: rgb(33, 212, 72) !important;
 				}
 			}
 		}
@@ -193,7 +193,7 @@ body {
 				flex-direction: column;
 
 				h2 {
-					color: rgb(180, 188, 202);
+					color: rgb(255, 255, 255);
 				}
 
 				.nft-slider-wrapper {
@@ -342,7 +342,7 @@ body {
 			gap: 10px;
 
 			h3 {
-				color: rgb(180, 188, 202);
+				color: rgb(217, 223, 233);
 				font-family: "IndustryMedium";
 				margin: 0;
 				font-size: 20px;
@@ -356,8 +356,8 @@ body {
 				button {
 					border: none;
 					border-radius: 4px;
-					background: rgb(36, 47, 66);
-					color: rgb(180, 188, 202);
+					background: rgb(6, 110, 34);
+					color: rgb(255, 255, 255);
 				}
 			}
 		}
@@ -382,7 +382,7 @@ body {
 				}
 
 				img {
-					width: 85%;
+					width: 60%;
 					height: auto;
 					margin: 0 auto;
 					border-radius: 20px;
@@ -589,7 +589,7 @@ body {
 
 	.home-disclaimer {
 		width: 100%;
-		margin-top: 40px;
+		margin-top: 60px;
 
 		.home-disclaimer-header {
 			margin: 0px auto 20px;
@@ -597,7 +597,7 @@ body {
 			text-align: center;
 			margin: 0;
 			font-size: 60px;
-			color: #3ba0d3;
+			color: rgb(64, 255, 115);
 		}
 
 		.home-disclaimer-content {
@@ -606,12 +606,12 @@ body {
 			text-align: center;
 
 			p {
-				color: #b4bcca;
+				color: #d4dae6;
 
 				span {
 					font-size: 18px;
 					font-family: "IndustryMedium";
-					color: rgb(166, 26, 225);
+					color: rgb(41, 216, 88);
 				}
 			}
 		}
@@ -638,7 +638,7 @@ body {
 				font-size: 60px;
 
 				span {
-					color: #3ba0d3;
+					color: rgb(64, 255, 115);
 				}
 			}
 		}
@@ -669,29 +669,14 @@ body {
 				@media (max-width: 660px) {
 					width: 80%;
 				}
-			}
 
-			.btn-twitter {
 				background: none;
 				color: white;
 				border: 2px solid white;
 
 				&:hover {
-					border: none;
 					color: white;
-					background-color: #3ba0d3;
-				}
-			}
-
-			.btn-discord {
-				border: none;
-				color: white;
-				background-color: #3ba0d3;
-
-				&:hover {
-					background: none;
-					color: white;
-					border: 2px solid white;
+					background-color: rgb(75, 131, 77);
 				}
 			}
 		}

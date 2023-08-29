@@ -121,7 +121,7 @@ export default function Home() {
         <div className="one-slider slider-3">
           <div className="line-1">
             <h1>COINFLIP</h1>
-            <h2>2 TIMES OR LOST ALL</h2>
+            <h2>DOUBLE YOUR WAGERS OR NOTHING.</h2>
           </div>
           <div className="line-2">
             <p>You bet WOLFIES token. If you win, you get 2 times token amount you bet.</p>

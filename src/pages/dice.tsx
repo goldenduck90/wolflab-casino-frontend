@@ -6,6 +6,68 @@ import { useProgram } from '../utils/useProgram';
 import ReactDice, { ReactDiceRef } from 'react-dice-complete';
 import { useWeb3 } from '../utils/useWeb3';
 
+const mockRecentGames = [
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 1,
+    amount: InfoDice.wager_amount[0],
+    result: true,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 1,
+    amount: InfoDice.wager_amount[1],
+    result: false,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 2,
+    amount: InfoDice.wager_amount[3],
+    result: false,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 2,
+    amount: InfoDice.wager_amount[0],
+    result: true,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 2,
+    amount: InfoDice.wager_amount[5],
+    result: true,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 1,
+    amount: InfoDice.wager_amount[1],
+    result: true,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 1,
+    amount: InfoDice.wager_amount[1],
+    result: true,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 1,
+    amount: InfoDice.wager_amount[1],
+    result: true,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 1,
+    amount: InfoDice.wager_amount[1],
+    result: true,
+  },
+  {
+    player: '0xa72c7b4a20f553c581cfcac3b9a06020d13448c27892c6109971a2fa7144c296',
+    select: 1,
+    amount: InfoDice.wager_amount[1],
+    result: true,
+  },
+];
 export default function DiceGame() {
   const wallet = useWeb3().walletAddress;
   const { getWOLFIESbalance, dice_roll, dice_claim, getDiceLastPlay } = useProgram();
@@ -226,6 +288,42 @@ export default function DiceGame() {
               </div>
             </div>
           )}
+        </div>
+      </div>
+      <div className="recent-game-header">Recent Games</div>
+      <div className="recent-game-body">
+        {mockRecentGames.map((item, idx) => {
+          return (
+            <div className="recent-game-item " key={idx}>
+              <div className="recent-game-detail">
+                <div className="item">
+                  <div className="logo">
+                    {item.result && item.select === 1 ? (
+                      <img src="/images/coin_front.png" alt="Wolf Coin Front Side" />
+                    ) : (
+                      <img src="/images/coin_back.png" alt="Wolf Coin Back Side" />
+                    )}
+                  </div>
+                </div>
+                <div className="item">{item.player.substr(0, 10) + '...'}</div>
+                <div className="item bet-amount">bet {item.amount} WOLFIES</div>
+                {((item.result && item.select === 1) ||
+                  (item.result === false && item.select === 2)) && (
+                  <div className="item">
+                    <div className="bet-image">
+                      <img src="/images/crown.svg" width="14px" alt="crown" />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="recent-game-time">
+                <div className="item-name">5 MINUTES AGO</div>
+              </div>
+            </div>
+          );
+        })}
+        <div className="show-more">
+          <button className="btn-more">SHOW MORE</button>
         </div>
       </div>
     </div>

@@ -280,14 +280,7 @@ export default function Coinflip() {
       <div className="recent-game-body">
         {recentGames.map((item, idx) => {
           return (
-            <div
-              className={
-                'recent-game-item ' +
-                (idx === 0 ? 'recent-game-top-item ' : '') +
-                (idx === recentGames.length - 1 ? 'recent-game-bottom-item' : '')
-              }
-              key={idx}
-            >
+            <div className="recent-game-item " key={idx}>
               <div className="recent-game-detail">
                 <div className="item">
                   <div className="logo">

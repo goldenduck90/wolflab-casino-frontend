@@ -1135,7 +1135,7 @@ body {
 					font-size: 20px;
 					font-family: "IndustryBlack";
 					margin: 10px 20px;
-					width: 150px;
+					width: 140px;
 					height: 62px;
 					transition: all 0.3s ease-in 0s;
 
@@ -1193,7 +1193,10 @@ body {
 			}
 		}
 	}
+}
 
+.coinflip-dashboard,
+.dice-dashboard {
 	.recent-game-header {
 		width: 60%;
 		max-width: 700px;
@@ -1405,7 +1408,7 @@ body {
 						font-size: 20px;
 						font-family: "IndustryBlack";
 						margin: 10px 20px;
-						width: 150px;
+						width: 140px;
 						height: 62px;
 						transition: all 0.3s ease-in 0s;
 

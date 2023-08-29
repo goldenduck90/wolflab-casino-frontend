@@ -16,7 +16,7 @@ export default function Mint() {
     <div className="minting-dashboard">
       <div className="minting-panel">
         <div className="minting-panel-title">
-          <h2>WOLFIE BOOSTER NFT MINT</h2>
+          <h2>WOLFIES BOOSTER NFT MINT</h2>
         </div>
         <div className="minting-panel-nft-hero">
           <video autoPlay loop width="300">

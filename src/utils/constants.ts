@@ -1,22 +1,22 @@
 export const InfoStaking = {
-  contract: '0xcFEa4b18cBF8afc4881bbc22c6700101f890A5EF',
-  token_type: '0x314d7114d2dDdd32e9d6AAB5be32234f4ceBcE63',
-  booster_nft_type: '0x310cf659C2DA5340870AD5A076dB44DEF33d1a8d',
-  character_nft_type: '0x310cf659C2DA5340870AD5A076dB44DEF33d1a8d',
+  contract: '0xeE756c9C994bC9c14dBfE85DaB439DC8575ebBE6',
+  token_type: '0x4B8F444b313AeBAC210A8B39Efd397a884D94c01',
+  booster_nft_type: '0xa3e135E91937296C51766917ca2F4E881d0e7Ef4',
+  character_nft_type: '0xa3e135E91937296C51766917ca2F4E881d0e7Ef4',
   token_decimals: 18,
 };
 
 export const InfoCoinflip = {
-  contract: '0x46Da8821464d0E824855f972A5a3E00Bb47CD1B8',
+  contract: '0x2D871163968f9C03e0961Cb46297025F05e21134',
   wager_amount: [500, 1000, 2000, 4000, 5000, 10000],
-  token_type: '0x314d7114d2dDdd32e9d6AAB5be32234f4ceBcE63',
+  token_type: '0x4B8F444b313AeBAC210A8B39Efd397a884D94c01',
   token_decimals: 18
 }
 
 export const InfoDice = {
-  contract: '0xaAc94E2330C1a97867c205Ba2cf6b70649A3874C',
+  contract: '0x314d7114d2dDdd32e9d6AAB5be32234f4ceBcE63',
   wager_amount: [500, 1000, 2000, 4000, 5000, 10000],
-  token_type: '0x314d7114d2dDdd32e9d6AAB5be32234f4ceBcE63',
+  token_type: '0x4B8F444b313AeBAC210A8B39Efd397a884D94c01',
   token_decimals: 18
 }
 

@@ -6,17 +6,19 @@ import WalletConnect from '@walletconnect/web3-provider';
 import { useWeb3 } from '../utils/useWeb3';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 
-const node_url = 'https://eth-goerli.g.alchemy.com/v2/K2lUv_YYheHH8ivc6rXrVkffDzm6lStE';
-const baseChainId = '0x5';
-const baseScan = 'https://goerli.etherscan.io';
+const node_url = 'https://base-goerli.publicnode.com';
+const baseChainId = '0x14a33';
+const baseChainIdNum = 84531;
+const baseScan = 'https://goerli.basescan.org/';
+const chainName = 'Baset Goerli Network';
 const getProviderOptions = (): IProviderOptions => {
   const providerOptions: IProviderOptions = {
     walletconnect: {
       package: WalletConnect,
       options: {
-        network: 'Base Network',
+        network: chainName,
         rpc: {
-          5: node_url,
+          baseChainIdNum: node_url,
         },
       },
     },
@@ -24,6 +26,7 @@ const getProviderOptions = (): IProviderOptions => {
       package: CoinbaseWalletSDK, // Required
       options: {
         appName: 'Wolf Game Lab',
+        network: chainName,
         rpc: node_url, // Optional if `infuraId` is provided; otherwise it's required
         chainId: 5, // Optional. It defaults to 1 if not provided
         darkMode: false, // Optional. Use dark theme, defaults to false
@@ -37,8 +40,9 @@ const getProviderOptions = (): IProviderOptions => {
       },
       options: {
         appName: 'Wolf Game Lab',
+        network: chainName,
         rpc: node_url,
-        chainId: 5,
+        chainId: baseChainIdNum,
         darkMode: false,
       },
       package: true,
@@ -128,7 +132,7 @@ export default function Header() {
                 params: [
                   {
                     chainId: baseChainId,
-                    chainName: 'Goerli Network',
+                    chainName: chainName,
                     rpcUrls: [node_url],
                     blockExplorerUrls: [baseScan],
                     nativeCurrency: {

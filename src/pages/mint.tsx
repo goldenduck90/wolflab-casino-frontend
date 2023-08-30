@@ -42,6 +42,7 @@ export default function Mint() {
     } catch (err: any) {
       openNotification('error', err.message);
       setIsMintLoading(false);
+      console.log(err.message);
     }
   };
 

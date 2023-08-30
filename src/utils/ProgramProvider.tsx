@@ -256,7 +256,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
   const mintBoosterNFT = useCallback(
     async (amount: number) => {
-      await boosterNFTContract.methods.mint(amount).send({
+      await boosterNFTContract.methods.mint(BigInt(amount)).send({
         from: wallet,
         gas: 300000,
         gasPrice: 5000000000,

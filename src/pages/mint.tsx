@@ -1,16 +1,50 @@
 import { Button, CircularProgress } from '@mui/material';
-import { useState } from 'react';
-// import { useProgram } from '../utils/useProgram';
-import { openNotification, sleep } from '../utils/components';
+import { useEffect, useState } from 'react';
+import { useProgram } from '../utils/useProgram';
+import { openNotification } from '../utils/components';
 // import { useWeb3 } from '../utils/useWeb3';
 
 export default function Mint() {
   // const wallet = useWeb3().walletAddress;
-  // const { stake_token, getStakingPoolData } = useProgram();
+  const { getAvailableBoosterMint, mintBoosterNFT } = useProgram();
 
   const [mintAmount, setMintAmount] = useState('');
-
+  const [availableAmount, setAvailableAmount] = useState(0);
   const [isMintLoading, setIsMintLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const available = await getAvailableBoosterMint();
+      setAvailableAmount(available);
+    })();
+  }, [getAvailableBoosterMint]);
+
+  const onMint = async () => {
+    if (isMintLoading) return;
+    try {
+      let amount = Number(mintAmount);
+      if (amount <= 0) {
+        openNotification('error', 'Please enter valid mint amount.');
+        setIsMintLoading(false);
+        return;
+      }
+
+      if (amount > availableAmount) {
+        openNotification('error', `You can mint maximum ${availableAmount} NFTs.`);
+        setIsMintLoading(false);
+        return;
+      }
+      setIsMintLoading(true);
+      await mintBoosterNFT(amount);
+      openNotification('success', 'Mint Success!');
+      setIsMintLoading(false);
+      setAvailableAmount(availableAmount - amount);
+    } catch (err: any) {
+      openNotification('error', err.message);
+      setIsMintLoading(false);
+      console.log(err.message);
+    }
+  };
 
   return (
     <div className="minting-dashboard">
@@ -24,8 +58,8 @@ export default function Mint() {
           </video>
         </div>
         <div className="minting-panel-available-info">
-          <p className="minting-main-panel-available-info-title">Available:</p>
-          <p className="minting-panel-available-amount">5</p>
+          <p className="minting-main-panel-available-info-title">Available Mint:</p>
+          <p className="minting-panel-available-amount">{availableAmount}</p>
         </div>
         <div className="minting-panel-action-part">
           <div className="minting-panel-action-detail">
@@ -35,6 +69,7 @@ export default function Mint() {
                 className="minting-panel-action-detail-amount"
                 placeholder="Enter amount to mint"
                 min="1"
+                // max={availableAmount}
                 step="1"
                 onChange={(e) => {
                   setMintAmount(e.target.value);
@@ -46,22 +81,14 @@ export default function Mint() {
               variant="contained"
               color="success"
               className="minting-panel-action-detail-button btn-stake"
-              onClick={async () => {
-                if (isMintLoading) return
-                try {
-                  if (Number(mintAmount) > 0) {
-                    setIsMintLoading(true);
-                    await sleep(2000);
-                    openNotification('success', 'Mint Success!');
-                    setIsMintLoading(false);
-                  }
-                } catch (err: any) {
-                  openNotification('error', err.message);
-                  setIsMintLoading(false);
-                }
-              }}
+              onClick={onMint}
             >
-              {isMintLoading ? <CircularProgress size={16} color="inherit" /> : ''} Mint
+              {isMintLoading ? (
+                <CircularProgress size={16} color="inherit" sx={{ marginRight: 4 }} />
+              ) : (
+                ''
+              )}{' '}
+              Mint
             </Button>
           </div>
         </div>

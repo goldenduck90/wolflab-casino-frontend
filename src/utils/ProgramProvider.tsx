@@ -1,4 +1,4 @@
-import { FC, useCallback, ReactNode } from 'react';
+import { FC, useCallback, ReactNode, useMemo } from 'react';
 import { ProgramContext } from './useProgram';
 import {
   InfoStaking,
@@ -8,6 +8,7 @@ import {
   FLIP_ABI,
   DICE_ABI,
   STAKING_ABI,
+  BOOSTER_NFT_ABI,
 } from './constants';
 import { useWeb3 } from './useWeb3';
 export interface ProgramProviderProps {
@@ -19,57 +20,79 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
   const wallet = web3.walletAddress;
   const provider = web3.web3;
 
-  const getWOLFIESbalance = async () => {
+  const tokenContract = useMemo(
+    () => (provider ? new provider.eth.Contract(ERC20_ABI, InfoCoinflip.token_type) : undefined),
+    [provider]
+  );
+
+  const stakingContract = useMemo(
+    () => (provider ? new provider.eth.Contract(STAKING_ABI, InfoStaking.contract) : undefined),
+    [provider]
+  );
+
+  const coinFlipContract = useMemo(
+    () => (provider ? new provider.eth.Contract(FLIP_ABI, InfoCoinflip.contract) : undefined),
+    [provider]
+  );
+
+  const diceContract = useMemo(
+    () => (provider ? new provider.eth.Contract(DICE_ABI, InfoDice.contract) : undefined),
+    [provider]
+  );
+
+  const boosterNFTContract = useMemo(
+    () =>
+      provider
+        ? new provider.eth.Contract(BOOSTER_NFT_ABI, InfoStaking.booster_nft_type)
+        : undefined,
+    [provider]
+  );
+
+  const getWOLFIESbalance = useCallback(async () => {
     try {
-      let tokenContract = new web3.web3.eth.Contract(ERC20_ABI, InfoCoinflip.token_type);
       let balance = await tokenContract.methods.balanceOf(wallet).call();
       return balance;
     } catch (err) {
       return 0;
     }
-  };
+  }, [wallet, tokenContract]);
 
-  const getStakingPoolData = async () => {
+  const getStakingPoolData = useCallback(async () => {
     try {
-      let StakingContract = new web3.web3.eth.Contract(STAKING_ABI, InfoStaking.contract);
-      let tvl = await StakingContract.methods.tvl().call();
+      let tvl = await stakingContract.methods.tvl().call();
       return { tvl: tvl };
     } catch (err) {
       return null;
     }
-  };
+  }, [stakingContract]);
 
-  const getUserStakeData = async () => {
+  const getUserStakeData = useCallback(async () => {
     try {
-      let StakingContract = new web3.web3.eth.Contract(STAKING_ABI, InfoStaking.contract);
-      let userData = await StakingContract.methods.StakingData(wallet).call();
+      let userData = await stakingContract.methods.StakingData(wallet).call();
       return userData;
     } catch (err) {
       return null;
     }
-  };
+  }, [wallet, stakingContract]);
 
-  const getOwnedNfts = async () => {
+  const getOwnedNfts = useCallback(async () => {
     try {
       return [];
     } catch (err) {
       return [];
     }
-  };
+  }, [stakingContract]);
 
-  const getStakedNfts = async () => {
+  const getStakedNfts = useCallback(async () => {
     try {
       return [];
     } catch (err) {
       return [];
     }
-  };
+  }, [stakingContract]);
 
   const stake_token = useCallback(
     async (_amount: number) => {
-      let tokenContract = new web3.web3.eth.Contract(ERC20_ABI, InfoCoinflip.token_type);
-      let StakingContract = new web3.web3.eth.Contract(STAKING_ABI, InfoStaking.contract);
-
       let amount = BigInt(_amount * Math.pow(10, InfoStaking.token_decimals));
 
       let balance = await tokenContract.methods.balanceOf(wallet).call();
@@ -86,7 +109,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
           });
       }
 
-      await StakingContract.methods
+      await stakingContract.methods
         .stakeToken(InfoStaking.token_type, '0x' + amount.toString(16))
         .send({
           from: wallet,
@@ -94,14 +117,13 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
           gasPrice: 5000000000,
         });
     },
-    [wallet, provider]
+    [wallet, stakingContract, tokenContract]
   );
 
   const unstake_token = useCallback(
     async (_amount: number) => {
-      let StakingContract = new web3.web3.eth.Contract(STAKING_ABI, InfoStaking.contract);
       let amount = _amount * Math.pow(10, InfoStaking.token_decimals);
-      await StakingContract.methods
+      await stakingContract.methods
         .unstakeToken(InfoStaking.token_type, '0x' + amount.toString(16))
         .send({
           from: wallet,
@@ -109,17 +131,16 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
           gasPrice: 5000000000,
         });
     },
-    [wallet]
+    [wallet, stakingContract]
   );
 
   const claim_rewards = useCallback(async () => {
-    let StakingContract = new web3.web3.eth.Contract(STAKING_ABI, InfoStaking.contract);
-    await StakingContract.methods.claimReward().send({
+    await stakingContract.methods.claimReward().send({
       from: wallet,
       gas: 300000,
       gasPrice: 5000000000,
     });
-  }, [wallet]);
+  }, [wallet, stakingContract]);
 
   const stake_nfts = useCallback(async (_items: string[]) => {}, [wallet]);
 
@@ -127,9 +148,6 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
   const coinflip_flip = useCallback(
     async (selectedSide: boolean, selectedAmount: number) => {
-      let tokenContract = new web3.web3.eth.Contract(ERC20_ABI, InfoCoinflip.token_type);
-      let coinFlipContract = new web3.web3.eth.Contract(FLIP_ABI, InfoCoinflip.contract);
-
       let amount = BigInt(selectedAmount * Math.pow(10, InfoCoinflip.token_decimals));
 
       let balance = await tokenContract.methods.balanceOf(wallet).call();
@@ -137,31 +155,25 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
       let allowance = await tokenContract.methods.allowance(wallet, InfoCoinflip.contract).call();
       if (allowance < amount) {
-        await tokenContract.methods
-          .approve(InfoCoinflip.contract, '0x' + (amount - allowance).toString(16))
-          .send({
-            from: wallet,
-            gas: 300000,
-            gasPrice: 5000000000,
-          });
-      }
-
-      let result = await coinFlipContract.methods
-        .flip(selectedSide, '0x' + amount.toString(16))
-        .send({
+        await tokenContract.methods.approve(InfoCoinflip.contract, amount - allowance).send({
           from: wallet,
           gas: 300000,
           gasPrice: 5000000000,
         });
+      }
+
+      let result = await coinFlipContract.methods.flip(selectedSide, amount).send({
+        from: wallet,
+        gas: 300000,
+        gasPrice: 5000000000,
+      });
 
       return result.events.FlipFinished.returnValues;
     },
-    [wallet, provider]
+    [wallet, coinFlipContract, tokenContract]
   );
 
   const coinflip_claim = useCallback(async () => {
-    let coinFlipContract = new web3.web3.eth.Contract(FLIP_ABI, InfoCoinflip.contract);
-
     let pendingAmount = await coinFlipContract.methods.pendingAmount(wallet).call();
     if (pendingAmount === 0) throw new Error('No Redeemable Tokens');
 
@@ -170,24 +182,20 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
       gas: 300000,
       gasPrice: 5000000000,
     });
-  }, [wallet]);
+  }, [wallet, coinFlipContract]);
 
-  const getFlipLastPlay = async () => {
+  const getFlipLastPlay = useCallback(async () => {
     try {
-      let coinFlipContract = new web3.web3.eth.Contract(FLIP_ABI, InfoCoinflip.contract);
       let pendingAmount = await coinFlipContract.methods.pendingAmount(wallet).call();
 
       return { pendingAmount: pendingAmount };
     } catch (err) {
       return false;
     }
-  };
+  }, [wallet, coinFlipContract]);
 
   const dice_roll = useCallback(
     async (selectedCase: number, selectedAmount: number) => {
-      let tokenContract = new web3.web3.eth.Contract(ERC20_ABI, InfoCoinflip.token_type);
-      let diceContract = new web3.web3.eth.Contract(DICE_ABI, InfoDice.contract);
-
       let amount = BigInt(selectedAmount * Math.pow(10, InfoDice.token_decimals));
 
       let balance = await tokenContract.methods.balanceOf(wallet).call();
@@ -212,12 +220,10 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
       return result.events.DiceFinished.returnValues.betData;
     },
-    [wallet, provider]
+    [wallet, tokenContract, diceContract]
   );
 
   const dice_claim = useCallback(async () => {
-    let diceContract = new web3.web3.eth.Contract(DICE_ABI, InfoDice.contract);
-
     let userData = await diceContract.methods.DiceData(wallet).call();
     if (userData.result === false) throw new Error('No Redeemable Tokens');
     if (userData.claimed === true) throw new Error('Already Claimed');
@@ -227,23 +233,42 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
       gas: 300000,
       gasPrice: 5000000000,
     });
-  }, [wallet]);
+  }, [wallet, diceContract]);
 
-  const getDiceLastPlay = async () => {
+  const getDiceLastPlay = useCallback(async () => {
     try {
-      let diceContract = new web3.web3.eth.Contract(DICE_ABI, InfoDice.contract);
       let userData = await diceContract.methods.DiceData(wallet).call();
 
       return userData;
     } catch (err) {
       return null;
     }
-  };
+  }, [wallet, diceContract]);
+
+  const getAvailableBoosterMint = useCallback(async () => {
+    try {
+      let available = await boosterNFTContract.methods.whitelist(wallet).call();
+      return Number(available);
+    } catch (err) {
+      return 0;
+    }
+  }, [wallet, boosterNFTContract]);
+
+  const mintBoosterNFT = useCallback(
+    async (amount: number) => {
+      await boosterNFTContract.methods.mint(BigInt(amount)).send({
+        from: wallet,
+        gas: 300000,
+        gasPrice: 5000000000,
+      });
+    },
+    [wallet, boosterNFTContract]
+  );
 
   return (
     <ProgramContext.Provider
       value={{
-        getWOLFIESbalance: getWOLFIESbalance,
+        getWOLFIESbalance,
 
         // Staking
         getUserStakeData,
@@ -267,6 +292,10 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
         dice_roll,
         dice_claim,
         getDiceLastPlay,
+
+        // NFT mint
+        getAvailableBoosterMint,
+        mintBoosterNFT,
       }}
     >
       {children}

@@ -6,10 +6,10 @@ import WalletConnect from '@walletconnect/web3-provider';
 import { useWeb3 } from '../utils/useWeb3';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 
-const node_url = 'https://rpc.ankr.com/eth_goerli';
+const node_url = 'https://eth-goerli.g.alchemy.com/v2/K2lUv_YYheHH8ivc6rXrVkffDzm6lStE';
 const baseChainId = '0x5';
+const baseScan = 'https://goerli.etherscan.io';
 const getProviderOptions = (): IProviderOptions => {
-  const infuraId = '00ca1859789d4b40bce01f4104844224';
   const providerOptions: IProviderOptions = {
     walletconnect: {
       package: WalletConnect,
@@ -24,7 +24,6 @@ const getProviderOptions = (): IProviderOptions => {
       package: CoinbaseWalletSDK, // Required
       options: {
         appName: 'Wolf Game Lab',
-        infuraId: infuraId, // Required
         rpc: node_url, // Optional if `infuraId` is provided; otherwise it's required
         chainId: 5, // Optional. It defaults to 1 if not provided
         darkMode: false, // Optional. Use dark theme, defaults to false
@@ -129,9 +128,9 @@ export default function Header() {
                 params: [
                   {
                     chainId: baseChainId,
-                    chainName: 'Base Goerli',
-                    rpcUrls: ['https://arbitrum-goerli.publicnode.com'],
-                    blockExplorerUrls: ['https://goerli.arbiscan.io/'],
+                    chainName: 'Goerli Network',
+                    rpcUrls: [node_url],
+                    blockExplorerUrls: [baseScan],
                     nativeCurrency: {
                       symbol: 'ETH',
                       decimals: 18,
@@ -157,7 +156,6 @@ export default function Header() {
   };
 
   const resetApp = async () => {
-    // const { web3 } = web3Data;
     if (web3 && web3.currentProvider && web3.currentProvider.close) {
       await web3.currentProvider.close();
     }

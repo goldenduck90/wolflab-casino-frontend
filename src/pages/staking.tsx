@@ -230,7 +230,7 @@ export default function Staking() {
                 ? '-'
                 : (userData == null
                     ? 2500
-                    : Number(userData.rewardRate)
+                    : Number(userData.rewardRate) == 0
                     ? 2500
                     : Number(userData.rewardRate)) /
                     100 +

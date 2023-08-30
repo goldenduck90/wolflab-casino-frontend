@@ -930,7 +930,6 @@ body {
 					gap: 10px;
 					flex-wrap: wrap;
 
-					// justify-content: flex-start;
 					.nft-staking-one-panel-content-body-banner {
 						font-size: 30px;
 						margin-top: 150px;
@@ -946,18 +945,23 @@ body {
 
 					.nft {
 						cursor: pointer;
-						flex-grow: 1;
-						width: 120px;
-						margin: 3px;
+						width: 140px;
+						margin: 10px;
 
 						img {
-							width: 120px;
-							height: 120px;
+							width: 100px;
+							height: 100px;
 						}
 
 						video {
-							width: 120px;
-							height: 120px;
+							width: 100px;
+							height: 100px;
+						}
+
+						.border {
+							width: 100%;
+							height: 100%;
+							padding-top: 15px;
 						}
 
 						.normal-border {
@@ -968,7 +972,7 @@ body {
 							color: #e9ffc5;
 						}
 
-						.red-border {
+						.selected-border {
 							border: 3px solid rgb(186, 44, 44);
 						}
 

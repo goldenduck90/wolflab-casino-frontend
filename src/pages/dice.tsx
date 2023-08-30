@@ -70,7 +70,12 @@ const mockRecentGames = [
 ];
 export default function DiceGame() {
   const wallet = useWeb3().walletAddress;
-  const { getWOLFIESbalance, dice_roll, dice_claim, getDiceLastPlay } = useProgram();
+  const {
+    getWOLFIESbalance,
+    diceRoll: dice_roll,
+    diceClaim: dice_claim,
+    getDiceLastPlay,
+  } = useProgram();
   const [windowSize, setWindowSize] = useState(window.innerWidth);
 
   const [userData, setUserData] = useState<any>(null);

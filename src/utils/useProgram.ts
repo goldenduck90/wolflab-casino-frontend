@@ -7,21 +7,21 @@ export interface ProgramContextState {
     getUserStakeData(): Promise<any>;
     getStakingPoolData(): Promise<any>;
     getOwnedBoosterNfts(): Promise<any[]>;
-    getStakedNfts(): Promise<any[]>;
-    stake_token(amount: number): Promise<void>;
-    unstake_token(amount: number): Promise<void>;
-    claim_rewards(): Promise<void>;
-    stake_nfts(item: string[]): Promise<void>;
-    unstake_nfts(item: string[]): Promise<void>;
+    getStakedBoosterNfts(): Promise<any[]>;
+    stakeToken(amount: number): Promise<void>;
+    unStakeToken(amount: number): Promise<void>;
+    claimRewards(): Promise<void>;
+    stakeBoosterNfts(item: number[]): Promise<void>;
+    unStakeBoosterNfts(item: number[]): Promise<void>;
 
     // Coinflip
-    coinflip_flip(side: boolean, amount: number): Promise<any>;
-    coinflip_claim(): Promise<void>;
+    coinflipFlip(side: boolean, amount: number): Promise<any>;
+    coinflipClaim(): Promise<void>;
     getFlipLastPlay(): Promise<any>;
 
     // Dice game
-    dice_roll(select: number, amount: number): Promise<any>;
-    dice_claim(): Promise<void>;
+    diceRoll(select: number, amount: number): Promise<any>;
+    diceClaim(): Promise<void>;
     getDiceLastPlay(): Promise<any>;
 
     // NFT mint

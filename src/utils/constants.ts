@@ -1,8 +1,8 @@
 export const InfoStaking = {
-  contract: '0xeE756c9C994bC9c14dBfE85DaB439DC8575ebBE6',
+  contract: '0x08821F0aF8Bf60d4fa1545D689D0b29E01d3043D',
   token_type: '0x4B8F444b313AeBAC210A8B39Efd397a884D94c01',
-  booster_nft_type: '0xa3e135E91937296C51766917ca2F4E881d0e7Ef4',
-  character_nft_type: '0xa3e135E91937296C51766917ca2F4E881d0e7Ef4',
+  booster_nft_type: '0xDC1A8b159D012fa0981DB21659Da8130D0ca2C6A',
+  character_nft_type: '0xDC1A8b159D012fa0981DB21659Da8130D0ca2C6A',
   token_decimals: 18,
 };
 

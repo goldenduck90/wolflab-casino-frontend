@@ -86,7 +86,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
             try {
               const tokenUri = await boosterNFTContract.methods.tokenURI(tokenId).call();
               const { data: nftData } = await axios.get(tokenUri);
-              return nftData;
+              return { tokenId: Number(tokenId), ...nftData };
             } catch {
               return null;
             }
@@ -99,15 +99,32 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
     }
   }, [boosterNFTContract, wallet]);
 
-  const getStakedNfts = useCallback(async () => {
+  const getStakedBoosterNfts = useCallback(async () => {
     try {
-      return [];
+      const tokenIds: string[] = await stakingContract.methods
+        .getStakedBoosterNFTTokens(wallet)
+        .call();
+
+      const nftsData = (
+        await Promise.all(
+          tokenIds.map(async (tokenId) => {
+            try {
+              const tokenUri = await boosterNFTContract.methods.tokenURI(tokenId).call();
+              const { data: nftData } = await axios.get(tokenUri);
+              return { tokenId: Number(tokenId), ...nftData };
+            } catch {
+              return null;
+            }
+          })
+        )
+      ).filter((nft) => nft != null);
+      return nftsData;
     } catch (err) {
       return [];
     }
-  }, [stakingContract]);
+  }, [boosterNFTContract, stakingContract, wallet]);
 
-  const stake_token = useCallback(
+  const stakeToken = useCallback(
     async (_amount: number) => {
       let amount = BigInt(_amount * Math.pow(10, InfoStaking.token_decimals));
 
@@ -116,31 +133,64 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
       let allowance = await tokenContract.methods.allowance(wallet, InfoStaking.contract).call();
       if (allowance < amount) {
-        await tokenContract.methods
-          .approve(InfoStaking.contract, '0x' + (amount - allowance).toString(16))
-          .send({
-            from: wallet,
-            gas: 300000,
-            gasPrice: 5000000000,
-          });
+        await tokenContract.methods.approve(InfoStaking.contract, amount - BigInt(allowance)).send({
+          from: wallet,
+          gas: 300000,
+          gasPrice: 5000000000,
+        });
       }
 
+      await stakingContract.methods.stakeToken(InfoStaking.token_type, amount).send({
+        from: wallet,
+        gas: 300000,
+        gasPrice: 5000000000,
+      });
+    },
+    [wallet, stakingContract, tokenContract]
+  );
+
+  const unStakeToken = useCallback(
+    async (_amount: number) => {
+      let amount = BigInt(_amount * Math.pow(10, InfoStaking.token_decimals));
+      await stakingContract.methods.unstakeToken(InfoStaking.token_type, amount).send({
+        from: wallet,
+        gas: 300000,
+        gasPrice: 5000000000,
+      });
+    },
+    [wallet, stakingContract]
+  );
+
+  const claimRewards = useCallback(async () => {
+    await stakingContract.methods.claimReward().send({
+      from: wallet,
+      gas: 300000,
+      gasPrice: 5000000000,
+    });
+  }, [wallet, stakingContract]);
+
+  const stakeBoosterNfts = useCallback(
+    async (tokenIds: number[]) => {
+      await boosterNFTContract.methods.approveMany(InfoStaking.contract, tokenIds).send({
+        from: wallet,
+        gas: 300000,
+        gasPrice: 5000000000,
+      });
       await stakingContract.methods
-        .stakeToken(InfoStaking.token_type, '0x' + amount.toString(16))
+        .stakeBoosterNFTToken(InfoStaking.booster_nft_type, tokenIds)
         .send({
           from: wallet,
           gas: 300000,
           gasPrice: 5000000000,
         });
     },
-    [wallet, stakingContract, tokenContract]
+    [wallet, stakingContract, boosterNFTContract]
   );
 
-  const unstake_token = useCallback(
-    async (_amount: number) => {
-      let amount = _amount * Math.pow(10, InfoStaking.token_decimals);
+  const unStakeBoosterNfts = useCallback(
+    async (tokenIds: number[]) => {
       await stakingContract.methods
-        .unstakeToken(InfoStaking.token_type, '0x' + amount.toString(16))
+        .unstakeBoosterNFTToken(InfoStaking.booster_nft_type, tokenIds)
         .send({
           from: wallet,
           gas: 300000,
@@ -150,19 +200,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
     [wallet, stakingContract]
   );
 
-  const claim_rewards = useCallback(async () => {
-    await stakingContract.methods.claimReward().send({
-      from: wallet,
-      gas: 300000,
-      gasPrice: 5000000000,
-    });
-  }, [wallet, stakingContract]);
-
-  const stake_nfts = useCallback(async (_items: string[]) => {}, [wallet]);
-
-  const unstake_nfts = useCallback(async (_items: string[]) => {}, [wallet]);
-
-  const coinflip_flip = useCallback(
+  const coinflipFlip = useCallback(
     async (selectedSide: boolean, selectedAmount: number) => {
       let amount = BigInt(selectedAmount * Math.pow(10, InfoCoinflip.token_decimals));
 
@@ -171,11 +209,13 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
       let allowance = await tokenContract.methods.allowance(wallet, InfoCoinflip.contract).call();
       if (allowance < amount) {
-        await tokenContract.methods.approve(InfoCoinflip.contract, amount - allowance).send({
-          from: wallet,
-          gas: 300000,
-          gasPrice: 5000000000,
-        });
+        await tokenContract.methods
+          .approve(InfoCoinflip.contract, amount - BigInt(allowance))
+          .send({
+            from: wallet,
+            gas: 300000,
+            gasPrice: 5000000000,
+          });
       }
 
       let result = await coinFlipContract.methods.flip(selectedSide, amount).send({
@@ -189,7 +229,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
     [wallet, coinFlipContract, tokenContract]
   );
 
-  const coinflip_claim = useCallback(async () => {
+  const coinflipClaim = useCallback(async () => {
     let pendingAmount = await coinFlipContract.methods.pendingAmount(wallet).call();
     if (pendingAmount === 0) throw new Error('No Redeemable Tokens');
 
@@ -210,7 +250,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
     }
   }, [wallet, coinFlipContract]);
 
-  const dice_roll = useCallback(
+  const diceRoll = useCallback(
     async (selectedCase: number, selectedAmount: number) => {
       let amount = BigInt(selectedAmount * Math.pow(10, InfoDice.token_decimals));
 
@@ -219,16 +259,14 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
       let allowance = await tokenContract.methods.allowance(wallet, InfoDice.contract).call();
       if (allowance < amount) {
-        await tokenContract.methods
-          .approve(InfoDice.contract, '0x' + (amount - allowance).toString(16))
-          .send({
-            from: wallet,
-            gas: 300000,
-            gasPrice: 5000000000,
-          });
+        await tokenContract.methods.approve(InfoDice.contract, amount - BigInt(allowance)).send({
+          from: wallet,
+          gas: 300000,
+          gasPrice: 5000000000,
+        });
       }
 
-      let result = await diceContract.methods.flip(selectedCase, '0x' + amount.toString(16)).send({
+      let result = await diceContract.methods.flip(selectedCase, amount).send({
         from: wallet,
         gas: 300000,
         gasPrice: 5000000000,
@@ -239,7 +277,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
     [wallet, tokenContract, diceContract]
   );
 
-  const dice_claim = useCallback(async () => {
+  const diceClaim = useCallback(async () => {
     let userData = await diceContract.methods.DiceData(wallet).call();
     if (userData.result === false) throw new Error('No Redeemable Tokens');
     if (userData.claimed === true) throw new Error('Already Claimed');
@@ -289,24 +327,24 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
         // Staking
         getUserStakeData,
         getOwnedBoosterNfts,
-        getStakedNfts,
+        getStakedBoosterNfts,
         getStakingPoolData,
-        stake_token,
-        unstake_token,
-        claim_rewards,
-        stake_nfts,
-        unstake_nfts,
+        stakeToken,
+        unStakeToken,
+        claimRewards,
+        stakeBoosterNfts,
+        unStakeBoosterNfts,
 
         // Coinflip
         // getUserCoinflipData,
-        coinflip_claim,
-        coinflip_flip,
+        coinflipClaim,
+        coinflipFlip,
         getFlipLastPlay,
 
         // Dice game
         // getUserDiceData,
-        dice_roll,
-        dice_claim,
+        diceRoll,
+        diceClaim,
         getDiceLastPlay,
 
         // NFT mint

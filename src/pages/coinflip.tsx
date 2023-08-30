@@ -70,7 +70,12 @@ const mockRecentGames = [
 
 export default function Coinflip() {
   const wallet = useWeb3().walletAddress;
-  const { coinflip_flip, coinflip_claim, getWOLFIESbalance, getFlipLastPlay } = useProgram();
+  const {
+    coinflipFlip: coinflip_flip,
+    coinflipClaim: coinflip_claim,
+    getWOLFIESbalance,
+    getFlipLastPlay,
+  } = useProgram();
 
   const [loading, setLoading] = useState(false);
   const [gameStatus, setGameStatus] = useState(0);

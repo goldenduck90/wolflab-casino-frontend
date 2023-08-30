@@ -1,5 +1,5 @@
 import { Button, CircularProgress } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useProgram } from '../utils/useProgram';
 import { InfoStaking } from '../utils/constants';
 import { openNotification, sleep } from '../utils/components';
@@ -8,16 +8,16 @@ import { useWeb3 } from '../utils/useWeb3';
 export default function Staking() {
   const wallet = useWeb3().walletAddress;
   const {
-    claim_rewards,
-    stake_token,
-    unstake_token,
+    claimRewards,
+    stakeToken,
+    unStakeToken,
     getWOLFIESbalance,
     getUserStakeData,
     getStakingPoolData,
-    getOwnedBoosterNfts,
-    // getStakedNfts,
-    // stake_nfts,
-    // unstake_nfts,
+    getOwnedBoosterNfts: getOwnedBoosterNftsAction,
+    stakeBoosterNfts: stakeBoosterNftsAction,
+    getStakedBoosterNfts: getStakedBoosterNftsAction,
+    unStakeBoosterNfts: unstakeBoosterNftsAction,
   } = useProgram();
 
   const [stakeAmount, setStakeAmount] = useState('');
@@ -29,18 +29,31 @@ export default function Staking() {
   const [isStakeLoading, setIsStakeLoading] = useState(false);
   const [isUnstakeLoading, setIsUnstakeLoading] = useState(false);
   const [isClaimLoading, setIsClaimLoading] = useState(false);
-  const [boosterNfts, setBoosterNfts] = useState<any[]>([]);
+
+  const [isLoadingOwnedBoosterNfts, setIsLoadingOwnedBoosterNfts] = useState(false);
+  const [ownedBoosterNfts, setOwnedBoosterNfts] = useState<any[]>([]);
+  const [selectedBoosterNftsForStake, setSelectedBoosterNftsForStake] = useState<number[]>([]);
+  const [isStakingBoosterNfts, setIsStakingBoosterNfts] = useState(false);
+
+  const [isLoadingStakedBoosterNfts, setIsLoadingStakedBoosterNfts] = useState(false);
+  const [stakedBoosterNfts, setStakedBoosterNfts] = useState<any[]>([]);
+  const [selectedBoosterNftsForUnstake, setSelectedBoosterNftsForUnstake] = useState<number[]>([]);
+  const [isUnstakingBoosterNfts, setIsUnstakingBoosterNfts] = useState(false);
 
   useEffect(() => {
     getPoolData();
   }, []);
 
-  useEffect(() => {
+  const getAllData = () => {
     getTokenAmount();
     getPoolData();
     getStakingUserData();
-    getNfts();
-  }, [wallet]);
+    getOwnedBoosterNfts();
+    getStakedBoosterNfts();
+  };
+  useEffect(() => {
+    getAllData();
+  }, [wallet, getOwnedBoosterNftsAction]);
 
   const getTokenAmount = async () => {
     setTokenAmount(await getWOLFIESbalance());
@@ -54,12 +67,143 @@ export default function Staking() {
     setUserData(await getUserStakeData());
   };
 
-  const getNfts = async () => {
+  const getOwnedBoosterNfts = async () => {
     (async () => {
-      const _boosterNfts = await getOwnedBoosterNfts();
-      setBoosterNfts(_boosterNfts);
+      if (isLoadingOwnedBoosterNfts) return;
+      setIsLoadingOwnedBoosterNfts(true);
+      const _boosterNfts = await getOwnedBoosterNftsAction();
+      setOwnedBoosterNfts(_boosterNfts);
+      setIsLoadingOwnedBoosterNfts(false);
     })();
   };
+
+  const getStakedBoosterNfts = async () => {
+    (async () => {
+      if (isLoadingStakedBoosterNfts) return;
+      setIsLoadingStakedBoosterNfts(true);
+      const _boosterNfts = await getStakedBoosterNftsAction();
+      setStakedBoosterNfts(_boosterNfts);
+      setIsLoadingStakedBoosterNfts(false);
+    })();
+  };
+
+  const onStakeToken = async () => {
+    try {
+      if (Number(stakeAmount) > 0) {
+        setIsStakeLoading(true);
+        await stakeToken(Number(stakeAmount));
+        setIsStakeLoading(false);
+        openNotification('success', 'Stake Success!');
+        await sleep(2000);
+        getStakingPoolData();
+      }
+    } catch (err: any) {
+      openNotification('error', err.message);
+      setIsStakeLoading(false);
+    }
+  };
+
+  const onUnStakeToken = async () => {
+    try {
+      setIsUnstakeLoading(true);
+      await unStakeToken(Number(unstakeAmount));
+      setIsUnstakeLoading(false);
+      openNotification('success', 'Unstake Success!');
+      getPoolData();
+      getStakingUserData();
+    } catch (err: any) {
+      openNotification('error', err.message);
+      setIsUnstakeLoading(false);
+    }
+  };
+
+  const onClaimToken = async () => {
+    try {
+      setIsClaimLoading(true);
+      await claimRewards();
+      setIsClaimLoading(false);
+      openNotification('success', 'Claim Reward Success!');
+      getStakingUserData();
+      getPoolData();
+    } catch (err: any) {
+      openNotification('error', err.message);
+      setIsClaimLoading(false);
+    }
+  };
+
+  const toggleSelectedBoosterNftsForStake = async (tokenId: number) => {
+    const isSelected = selectedBoosterNftsForStake.findIndex((id) => id == tokenId) != -1;
+
+    const newNfts = isSelected
+      ? selectedBoosterNftsForStake.filter((id) => id != tokenId)
+      : [...selectedBoosterNftsForStake, tokenId];
+    setSelectedBoosterNftsForStake(newNfts);
+  };
+
+  const toggleSelectedBoosterNftsForUnstake = async (tokenId: number) => {
+    const isSelected = selectedBoosterNftsForUnstake.findIndex((id) => id == tokenId) != -1;
+
+    const newNfts = isSelected
+      ? selectedBoosterNftsForUnstake.filter((id) => id != tokenId)
+      : [...selectedBoosterNftsForUnstake, tokenId];
+    setSelectedBoosterNftsForUnstake(newNfts);
+  };
+
+  const stakeBoosterNfts = useCallback(
+    async (tokenIds: number[]) => {
+      if (isStakingBoosterNfts) return;
+
+      try {
+        setIsStakingBoosterNfts(true);
+        await stakeBoosterNftsAction(tokenIds);
+        openNotification('success', 'Stake Success!');
+        await sleep(2000);
+        setSelectedBoosterNftsForStake([]);
+      } catch (err: any) {
+        openNotification('error', err.message);
+      }
+      setIsStakingBoosterNfts(false);
+
+      getAllData();
+    },
+    [stakeBoosterNftsAction, isStakingBoosterNfts, setSelectedBoosterNftsForStake]
+  );
+
+  const onStakeBoosterNfts = useCallback(async () => {
+    await stakeBoosterNfts(selectedBoosterNftsForStake);
+  }, [selectedBoosterNftsForStake, stakeBoosterNfts]);
+
+  const onStakeAllBoosterNfts = useCallback(async () => {
+    await stakeBoosterNfts(ownedBoosterNfts.map((nft) => nft.tokenId));
+  }, [ownedBoosterNfts, stakeBoosterNfts]);
+
+  const unstakeBoosterNfts = useCallback(
+    async (tokenIds: number[]) => {
+      if (isUnstakingBoosterNfts) return;
+
+      try {
+        setIsUnstakingBoosterNfts(true);
+        await unstakeBoosterNftsAction(tokenIds);
+        openNotification('success', 'Unstake Success!');
+        await sleep(2000);
+        setSelectedBoosterNftsForUnstake([]);
+      } catch (err: any) {
+        openNotification('error', err.message);
+      }
+      setIsUnstakingBoosterNfts(false);
+
+      getAllData();
+    },
+    [unstakeBoosterNftsAction, isUnstakingBoosterNfts]
+  );
+
+  const onUnstakeBoosterNfts = useCallback(async () => {
+    await unstakeBoosterNfts(selectedBoosterNftsForUnstake);
+  }, [selectedBoosterNftsForUnstake, unstakeBoosterNfts]);
+
+  const onUnstakeAllBoosterNfts = useCallback(async () => {
+    await unstakeBoosterNfts(stakedBoosterNfts.map((nft) => nft.tokenId));
+  }, [stakedBoosterNfts, unstakeBoosterNfts]);
 
   return (
     <div className="staking-dashboard">
@@ -100,22 +244,19 @@ export default function Staking() {
             <p className="staking-main-panel-one-info-detail">
               {userData == null
                 ? '-'
-                : Number(userData.amount) / Math.pow(10, InfoStaking.token_decimals) + ' WOLFIES'}
+                : BigInt(userData.amount) / BigInt(Math.pow(10, InfoStaking.token_decimals)) +
+                  ' WOLFIES'}
             </p>
           </div>
           <div className="staking-main-panel-one-info">
             <p className="staking-main-panel-one-info-title">Reward</p>
-            {/* <p className="staking-main-panel-one-info-detail">
-              {userData == null
-                ? '-'
-                : userData['reward_amount'] / Math.pow(10, InfoStaking.token_decimals) + ' WOLFIES'}
-            </p> */}
             <p className="staking-main-panel-one-info-detail">
               {userData == null
                 ? '-'
                 : (
-                    Number(userData.pendingReward) / Math.pow(10, InfoStaking.token_decimals)
-                  ).toFixed(4) + ' WOLFIES'}
+                    BigInt(userData.pendingReward) /
+                    BigInt(Math.pow(10, InfoStaking.token_decimals))
+                  ).toString() + ' WOLFIES'}
             </p>
           </div>
         </div>
@@ -139,23 +280,14 @@ export default function Staking() {
               variant="contained"
               color="success"
               className="staking-main-panel-action-detail-button btn-stake"
-              onClick={async () => {
-                try {
-                  if (Number(stakeAmount) > 0) {
-                    setIsStakeLoading(true);
-                    await stake_token(Number(stakeAmount));
-                    setIsStakeLoading(false);
-                    openNotification('success', 'Stake Success!');
-                    await sleep(2000);
-                    getStakingPoolData();
-                  }
-                } catch (err: any) {
-                  openNotification('error', err.message);
-                  setIsStakeLoading(false);
-                }
-              }}
+              onClick={onStakeToken}
             >
-              {isStakeLoading ? <CircularProgress size={16} color="inherit" /> : ''} Stake
+              {isStakeLoading ? (
+                <CircularProgress sx={{ marginRight: '10px' }} size={16} color="inherit" />
+              ) : (
+                ''
+              )}{' '}
+              Stake
             </Button>
           </div>
           <div className="staking-main-panel-action-detail">
@@ -175,22 +307,16 @@ export default function Staking() {
             </div>
             <Button
               variant="contained"
+              color="success"
               className="staking-main-panel-action-detail-button btn-unstake"
-              onClick={async () => {
-                try {
-                  setIsUnstakeLoading(true);
-                  await unstake_token(Number(unstakeAmount));
-                  setIsUnstakeLoading(false);
-                  openNotification('success', 'Unstake Success!');
-                  await sleep(2000);
-                  getStakingPoolData();
-                } catch (err: any) {
-                  openNotification('error', err.message);
-                  setIsUnstakeLoading(false);
-                }
-              }}
+              onClick={onUnStakeToken}
             >
-              {isUnstakeLoading ? <CircularProgress size={16} color="inherit" /> : ''} Unstake
+              {isUnstakeLoading ? (
+                <CircularProgress sx={{ marginRight: '10px' }} size={16} color="inherit" />
+              ) : (
+                ''
+              )}{' '}
+              Unstake
             </Button>
           </div>
         </div>
@@ -203,21 +329,14 @@ export default function Staking() {
               fontFamily: 'IndustryBold',
             }}
             color="success"
-            onClick={async () => {
-              try {
-                setIsClaimLoading(true);
-                await claim_rewards();
-                setIsClaimLoading(false);
-                openNotification('success', 'Claim Reward Success!');
-                await sleep(2000);
-                getStakingUserData();
-              } catch (err: any) {
-                openNotification('error', err.message);
-                setIsClaimLoading(false);
-              }
-            }}
+            onClick={onClaimToken}
           >
-            {isClaimLoading ? <CircularProgress size={16} color="inherit" /> : ''} Claim Reward
+            {isClaimLoading ? (
+              <CircularProgress sx={{ marginRight: '10px' }} size={16} color="inherit" />
+            ) : (
+              ''
+            )}{' '}
+            Claim Reward
           </Button>
         </div>
       </div>
@@ -228,24 +347,47 @@ export default function Staking() {
         <div className="nft-staking-one-panel">
           <div className="nft-staking-one-panel-content">
             <div className="nft-staking-one-panel-content-body">
-              {boosterNfts.map((_boosterNft, index) => (
-                <div key={index} className="nft">
-                  <video autoPlay loop muted preload="auto">
-                    <source src="/images/WolfieBoosterNFT.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              ))}
+              {ownedBoosterNfts.map(({ name, tokenId }) => {
+                const isSelected =
+                  selectedBoosterNftsForStake.findIndex((id) => id == tokenId) != -1;
+                return (
+                  <div
+                    key={tokenId}
+                    className="nft"
+                    onClick={() => toggleSelectedBoosterNftsForStake(tokenId)}
+                  >
+                    <div className={'border ' + (isSelected ? 'selected-border' : 'normal-border')}>
+                      <video autoPlay loop muted preload="auto">
+                        <source src="/images/WolfieBoosterNFT.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      <p>
+                        {name} #{tokenId + 1}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="nft-staking-one-panel-actions">
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button variant="contained" color="success" onClick={async () => {}}>
+              <Button variant="contained" color="success" onClick={onStakeBoosterNfts}>
+                {isStakingBoosterNfts ? (
+                  <CircularProgress sx={{ marginRight: '10px' }} size={16} color="inherit" />
+                ) : (
+                  ''
+                )}{' '}
                 Stake
               </Button>
             </div>
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button variant="outlined" color="success" onClick={async () => {}}>
+              <Button variant="outlined" color="success" onClick={onStakeAllBoosterNfts}>
+                {isStakingBoosterNfts ? (
+                  <CircularProgress sx={{ marginRight: '10px' }} size={16} color="inherit" />
+                ) : (
+                  ''
+                )}{' '}
                 Stake All
               </Button>
             </div>
@@ -253,16 +395,48 @@ export default function Staking() {
         </div>
         <div className="nft-staking-one-panel">
           <div className="nft-staking-one-panel-content">
-            <div className="nft-staking-one-panel-content-body"></div>
+            <div className="nft-staking-one-panel-content-body">
+              {stakedBoosterNfts.map(({ name, tokenId }) => {
+                const isSelected =
+                  selectedBoosterNftsForUnstake.findIndex((id) => id == tokenId) != -1;
+                return (
+                  <div
+                    key={tokenId}
+                    className="nft"
+                    onClick={() => toggleSelectedBoosterNftsForUnstake(tokenId)}
+                  >
+                    <div className={'border ' + (isSelected ? 'selected-border' : 'normal-border')}>
+                      <video autoPlay loop muted preload="auto">
+                        <source src="/images/WolfieBoosterNFT.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      <p>
+                        {name} #{tokenId + 1}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <div className="nft-staking-one-panel-actions">
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button variant="contained" color="primary" onClick={async () => {}}>
+              <Button variant="contained" color="success" onClick={onUnstakeBoosterNfts}>
+                {isUnstakingBoosterNfts ? (
+                  <CircularProgress sx={{ marginRight: '10px' }} size={16} color="inherit" />
+                ) : (
+                  ''
+                )}{' '}
                 Unstake
               </Button>
             </div>
             <div className="nft-staking-one-panel-action-wrapper">
-              <Button variant="outlined" color="primary" onClick={async () => {}}>
+              <Button variant="outlined" color="success" onClick={onUnstakeAllBoosterNfts}>
+                {isUnstakingBoosterNfts ? (
+                  <CircularProgress sx={{ marginRight: '10px' }} size={16} color="inherit" />
+                ) : (
+                  ''
+                )}{' '}
                 Unstake All
               </Button>
             </div>

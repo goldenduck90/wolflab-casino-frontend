@@ -228,7 +228,13 @@ export default function Staking() {
             <p className="staking-main-panel-one-info-detail">
               {poolData == null
                 ? '-'
-                : (userData == null ? 2500 : Number(userData.rewardRate)) / 100 + ' %'}
+                : (userData == null
+                    ? 2500
+                    : Number(userData.rewardRate)
+                    ? 2500
+                    : Number(userData.rewardRate)) /
+                    100 +
+                  ' %'}
             </p>
           </div>
         </div>

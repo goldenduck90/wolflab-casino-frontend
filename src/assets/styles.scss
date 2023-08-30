@@ -723,7 +723,7 @@ body {
 		width: 60%;
 		max-width: 800px;
 		min-width: 360px;
-		background-color: rgb(25, 27, 23);
+		background-color: rgb(23, 37, 9);
 		border-radius: 16px;
 		margin-bottom: 40px;
 
@@ -874,6 +874,18 @@ body {
 		}
 	}
 
+	.nft-staking-panel-header {
+		margin-top: 20px;
+		text-align: left;
+
+		h2 {
+			font-family: "IndustryBlack";
+			line-height: 24px;
+			margin: 0;
+			color: white;
+		}
+	}
+
 	.nft-staking-panel-wrapper {
 		width: 90%;
 		padding: 20px;
@@ -893,7 +905,7 @@ body {
 
 			.nft-staking-one-panel-content {
 				border-radius: 0 16px 16px 16px;
-				background-color: rgb(69, 70, 68);
+				background-color: rgb(2, 36, 2);
 				height: 400px;
 				overflow: auto;
 				padding: 32px;
@@ -916,7 +928,7 @@ body {
 				.nft-staking-one-panel-content-body {
 					display: flex;
 					gap: 10px;
-					flex-wrap: wrap;
+					flex-wrap: nowrap;
 
 					// justify-content: flex-start;
 					.nft-staking-one-panel-content-body-banner {
@@ -939,6 +951,11 @@ body {
 						margin: 3px;
 
 						img {
+							width: 120px;
+							height: 120px;
+						}
+
+						video {
 							width: 120px;
 							height: 120px;
 						}

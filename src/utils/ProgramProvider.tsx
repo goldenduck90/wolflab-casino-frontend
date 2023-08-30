@@ -1,4 +1,5 @@
 import { FC, useCallback, ReactNode, useMemo } from 'react';
+import axios from 'axios';
 import { ProgramContext } from './useProgram';
 import {
   InfoStaking,
@@ -75,13 +76,28 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
     }
   }, [wallet, stakingContract]);
 
-  const getOwnedNfts = useCallback(async () => {
+  const getOwnedBoosterNfts = useCallback(async () => {
     try {
-      return [];
+      const tokenIds: string[] = await boosterNFTContract.methods.tokensOfOwner(wallet).call();
+
+      const nftsData = (
+        await Promise.all(
+          tokenIds.map(async (tokenId) => {
+            try {
+              const tokenUri = await boosterNFTContract.methods.tokenURI(tokenId).call();
+              const { data: nftData } = await axios.get(tokenUri);
+              return nftData;
+            } catch {
+              return null;
+            }
+          })
+        )
+      ).filter((nft) => nft != null);
+      return nftsData;
     } catch (err) {
       return [];
     }
-  }, [stakingContract]);
+  }, [boosterNFTContract, wallet]);
 
   const getStakedNfts = useCallback(async () => {
     try {
@@ -272,7 +288,7 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
         // Staking
         getUserStakeData,
-        getOwnedNfts,
+        getOwnedBoosterNfts,
         getStakedNfts,
         getStakingPoolData,
         stake_token,

@@ -6,7 +6,7 @@ export interface ProgramContextState {
     // Staking
     getUserStakeData(): Promise<any>;
     getStakingPoolData(): Promise<any>;
-    getOwnedNfts(): Promise<any[]>;
+    getOwnedBoosterNfts(): Promise<any[]>;
     getStakedNfts(): Promise<any[]>;
     stake_token(amount: number): Promise<void>;
     unstake_token(amount: number): Promise<void>;

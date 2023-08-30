@@ -230,8 +230,9 @@ export default function Staking() {
             <div className="nft-staking-one-panel-content-body">
               {boosterNfts.map((_boosterNft, index) => (
                 <div key={index} className="nft">
-                  <video autoPlay loop>
+                  <video autoPlay loop muted preload="auto">
                     <source src="/images/WolfieBoosterNFT.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
                   </video>
                 </div>
               ))}

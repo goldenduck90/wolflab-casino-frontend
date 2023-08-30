@@ -53,8 +53,9 @@ export default function Mint() {
           <h2>WOLFIES BOOSTER NFT MINT</h2>
         </div>
         <div className="minting-panel-nft-hero">
-          <video autoPlay loop width="300">
+          <video autoPlay loop muted preload="auto" width="300">
             <source src="/images/WolfieBoosterNFT.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
           </video>
         </div>
         <div className="minting-panel-available-info">

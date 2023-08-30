@@ -8,6 +8,7 @@ import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 
 const node_url = 'https://rpc.ankr.com/eth_goerli';
 const baseChainId = '0x5';
+const baseScan = 'https://goerli.etherscan.io';
 const getProviderOptions = (): IProviderOptions => {
   const infuraId = '00ca1859789d4b40bce01f4104844224';
   const providerOptions: IProviderOptions = {
@@ -129,9 +130,9 @@ export default function Header() {
                 params: [
                   {
                     chainId: baseChainId,
-                    chainName: 'Base Goerli',
-                    rpcUrls: ['https://arbitrum-goerli.publicnode.com'],
-                    blockExplorerUrls: ['https://goerli.arbiscan.io/'],
+                    chainName: 'Goerli Network',
+                    rpcUrls: [node_url],
+                    blockExplorerUrls: [baseScan],
                     nativeCurrency: {
                       symbol: 'ETH',
                       decimals: 18,

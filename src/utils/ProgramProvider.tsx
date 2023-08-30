@@ -155,22 +155,18 @@ export const ProgramProvider: FC<ProgramProviderProps> = ({ children }) => {
 
       let allowance = await tokenContract.methods.allowance(wallet, InfoCoinflip.contract).call();
       if (allowance < amount) {
-        await tokenContract.methods
-          .approve(InfoCoinflip.contract, '0x' + (amount - allowance).toString(16))
-          .send({
-            from: wallet,
-            gas: 300000,
-            gasPrice: 5000000000,
-          });
-      }
-
-      let result = await coinFlipContract.methods
-        .flip(selectedSide, '0x' + amount.toString(16))
-        .send({
+        await tokenContract.methods.approve(InfoCoinflip.contract, amount - allowance).send({
           from: wallet,
           gas: 300000,
           gasPrice: 5000000000,
         });
+      }
+
+      let result = await coinFlipContract.methods.flip(selectedSide, amount).send({
+        from: wallet,
+        gas: 300000,
+        gasPrice: 5000000000,
+      });
 
       return result.events.FlipFinished.returnValues;
     },

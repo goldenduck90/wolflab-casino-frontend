@@ -3,7 +3,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_NFTToken",
+        "name": "_BoosterNFTToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_CharacterNFTToken",
         "type": "address"
       },
       {
@@ -37,9 +42,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "token_id",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
       }
     ],
     "name": "NFTTokenStaked",
@@ -62,9 +67,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "token_id",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
       }
     ],
     "name": "NFTTokenUnstaked",
@@ -166,7 +171,20 @@
   },
   {
     "inputs": [],
-    "name": "NFTToken",
+    "name": "BoosterNFTToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "CharacterNFTToken",
     "outputs": [
       {
         "internalType": "address",
@@ -277,12 +295,30 @@
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
       }
     ],
-    "name": "stakeNFTToken",
+    "name": "stakeBoosterNFTToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "stakeCharacterNFTToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -352,12 +388,30 @@
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
       }
     ],
-    "name": "unstakeNFTToken",
+    "name": "unstakeBoosterNFTToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "unstakeCharacterNFTToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -401,7 +455,20 @@
         "type": "address"
       }
     ],
-    "name": "updateNFTToken",
+    "name": "updateBoosterNFTToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_NFTToken",
+        "type": "address"
+      }
+    ],
+    "name": "updateCharacterNFTToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

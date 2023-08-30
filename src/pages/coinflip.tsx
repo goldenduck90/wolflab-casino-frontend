@@ -86,6 +86,7 @@ export default function Coinflip() {
   }, [wallet]);
 
   useEffect(() => {
+    getTokenAmount();
     const interval = setInterval(() => {
       getTokenAmount();
     }, 5000);

@@ -157,7 +157,6 @@ export default function Header() {
   };
 
   const resetApp = async () => {
-    // const { web3 } = web3Data;
     if (web3 && web3.currentProvider && web3.currentProvider.close) {
       await web3.currentProvider.close();
     }

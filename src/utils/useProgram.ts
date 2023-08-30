@@ -8,21 +8,25 @@ export interface ProgramContextState {
     getStakingPoolData(): Promise<any>;
     getOwnedNfts(): Promise<any[]>;
     getStakedNfts(): Promise<any[]>;
-    stake_token(amount: number): void;
-    unstake_token(amount: number): void;
-    claim_rewards(): void;
-    stake_nfts(item: string[]): void;
-    unstake_nfts(item: string[]): void;
+    stake_token(amount: number): Promise<void>;
+    unstake_token(amount: number): Promise<void>;
+    claim_rewards(): Promise<void>;
+    stake_nfts(item: string[]): Promise<void>;
+    unstake_nfts(item: string[]): Promise<void>;
 
     // Coinflip
     coinflip_flip(side: boolean, amount: number): Promise<any>;
-    coinflip_claim(): void;
+    coinflip_claim(): Promise<void>;
     getFlipLastPlay(): Promise<any>;
 
     // Dice game
     dice_roll(select: number, amount: number): Promise<any>;
-    dice_claim(): void;
+    dice_claim(): Promise<void>;
     getDiceLastPlay(): Promise<any>;
+
+    // NFT mint
+    getAvailableBoosterMint(): Promise<number>;
+    mintBoosterNFT: (amount: number) => Promise<void>
 }
 
 export const ProgramContext = createContext<ProgramContextState>({

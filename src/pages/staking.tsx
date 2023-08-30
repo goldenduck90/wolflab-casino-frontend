@@ -14,7 +14,7 @@ export default function Staking() {
     getWOLFIESbalance,
     getUserStakeData,
     getStakingPoolData,
-    // getOwnedNfts,
+    getOwnedBoosterNfts,
     // getStakedNfts,
     // stake_nfts,
     // unstake_nfts,
@@ -29,6 +29,7 @@ export default function Staking() {
   const [isStakeLoading, setIsStakeLoading] = useState(false);
   const [isUnstakeLoading, setIsUnstakeLoading] = useState(false);
   const [isClaimLoading, setIsClaimLoading] = useState(false);
+  const [boosterNfts, setBoosterNfts] = useState<any[]>([]);
 
   useEffect(() => {
     getPoolData();
@@ -38,6 +39,7 @@ export default function Staking() {
     getTokenAmount();
     getPoolData();
     getStakingUserData();
+    getNfts();
   }, [wallet]);
 
   const getTokenAmount = async () => {
@@ -50,6 +52,13 @@ export default function Staking() {
 
   const getStakingUserData = async () => {
     setUserData(await getUserStakeData());
+  };
+
+  const getNfts = async () => {
+    (async () => {
+      const _boosterNfts = await getOwnedBoosterNfts();
+      setBoosterNfts(_boosterNfts);
+    })();
   };
 
   return (
@@ -212,10 +221,22 @@ export default function Staking() {
           </Button>
         </div>
       </div>
+      <div className="nft-staking-panel-header">
+        <h2>STAKE WOLFIES BOOSTER NFT</h2>
+      </div>
       <div className="nft-staking-panel-wrapper">
         <div className="nft-staking-one-panel">
           <div className="nft-staking-one-panel-content">
-            <div className="nft-staking-one-panel-content-body"></div>
+            <div className="nft-staking-one-panel-content-body">
+              {boosterNfts.map((_boosterNft, index) => (
+                <div key={index} className="nft">
+                  <video autoPlay loop muted preload="auto">
+                    <source src="/images/WolfieBoosterNFT.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="nft-staking-one-panel-actions">
             <div className="nft-staking-one-panel-action-wrapper">
